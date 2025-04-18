@@ -21,6 +21,18 @@ export const levelParts = [
   `                    \n` +
   `bbbbbbbbbbbbbbbbbbbb`,
 
+  `        bbbbbbbbbbbb\n` +
+  `       cbbbbbbbbbbbb\n` +
+  `      c bbbbbbbbbbbb\n` +
+  `     c  bbbbbbbbbbbb\n` +
+  `bbbbbbbbbbbbbbbbbbbb`,
+
+  `bbbbbbbbbbbbbbbbbbbb\n` +
+  `bbbbbbbbbbbbbbbbbbbb\n` +
+  `bbbbbbbbbbbbbbbbbbbb\n` +
+  `bbbbbbbbbbbbbbbbbbbb\n` +
+  `bbbbbbbbbbbbbbbbbbbb`,
+
   `                    \n` +
   `    ccc             \n` +
   `                    \n` +

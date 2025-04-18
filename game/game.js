@@ -2,6 +2,9 @@ import { GameContext } from './lib.js';
 import { Player } from './player.js';
 import { Camera } from './player.js';
 import { Level } from './level.js';
+import { drawBackground } from './background.js';
+import { animateCoin } from './level.js';
+import { loadAllSounds } from "./sound.js";
 
 // Set screen size
 GameContext.canvas.width = window.innerWidth;
@@ -12,10 +15,12 @@ let camera;
 let level;
 
 function initGame() {
-  player = new Player(0, -GameContext.tileSize / 2);
-  camera = new Camera(0, 3 * GameContext.tileSize);
+  player = new Player(20 * GameContext.tileSize, 159);
+  camera = new Camera(player.x, 3 * GameContext.tileSize);
   level = new Level();
   level.load(level.generateSeed(5));
+  Input.space = false;
+  Input.shift = false;
 }
 
 export function endGame() {
@@ -31,7 +36,11 @@ function startGame() {
 
 function update() {
   player.update(level);
-  camera.x = player.x;
+  camera.x += GameContext.scrollingSpeed;
+  if ((camera.x - player.x - player.sizeX) > (GameContext.canvas.width / 2)) {
+    endGame();
+  }
+  animateCoin();
 }
 
 function handleInputs() {
@@ -46,6 +55,7 @@ function handleInputs() {
 }
 
 function render() {
+  drawBackground();
   level.render(camera);
   player.render(camera);
 }
@@ -75,7 +85,7 @@ function gameLoop(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const delta = timestamp - lastTime;
 
-  if (delta >= timestep) {
+  if (delta >= timestep && GameContext.gameIsRunning) {
     lastTime = timestamp;
     handleInputs();
     update();
