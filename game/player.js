@@ -40,6 +40,7 @@ export class Player {
         this.iFrames = 0;
         this.slideFrames = -slideTime;
         this.rFrames = 0;
+        this.coins = 0;
     }
 
     render(camera) {
@@ -167,6 +168,7 @@ export class Player {
                 const tile = level.getTile(tileX, tileY);
                 if (tile !== null && tile.collectable) {
                     tile.collect();
+                    this.coins++;
                 }
                 if (tile !== null && tile.harmful) {
                     this.handleHit();

@@ -4,7 +4,8 @@ import { Camera } from './player.js';
 import { Level } from './level.js';
 import { drawBackground } from './background.js';
 import { animateCoin } from './level.js';
-import { loadAllSounds } from "./sound.js";
+import { clearOverlay, showOverlay } from '../menu/overlay.js';
+import { menu } from '../menu/mainMenu.js';
 
 // Set screen size
 GameContext.canvas.width = window.innerWidth;
@@ -24,11 +25,12 @@ function initGame() {
 }
 
 export function endGame() {
+  clearOverlay();
   initGame();
   GameContext.gameIsRunning = false;
 }
 
-function startGame() {
+export function startGame() {
   player.speedX = GameContext.scrollingSpeed;
   camera.speedX = GameContext.scrollingSpeed;
   GameContext.gameIsRunning = true;
@@ -44,6 +46,9 @@ function update() {
 }
 
 function handleInputs() {
+  if (!GameContext.gameIsRunning) {
+    return;
+  }
   if (Input.space) {
     player.jump();
     Input.space = false;
@@ -71,8 +76,6 @@ window.addEventListener("keydown", (e) => {
     Input.shift = true;
   } else if (e.key === " ") {
     Input.space = true;
-  } else if (e.key === "Enter" && !GameContext.gameIsRunning) {
-    startGame();
   }
 });
 
@@ -81,10 +84,11 @@ initGame();
 let lastTime = 0;
 const timestep = 1000.0 / 60.0; // 16.666 ms
 
-function gameLoop(timestamp) {
+export function gameLoop(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const delta = timestamp - lastTime;
 
+  //Logic
   if (delta >= timestep && GameContext.gameIsRunning) {
     lastTime = timestamp;
     handleInputs();
@@ -93,11 +97,20 @@ function gameLoop(timestamp) {
       endGame();
     }
   }
+
+  //Render
   GameContext.ctx.clearRect(0, 0, GameContext.canvas.width, GameContext.canvas.height);
   render();
+  if (GameContext.gameIsRunning) {
+    showOverlay(player);
+  }
+  if (!GameContext.gameIsRunning) {
+    menu.style.display = "block";
+  } else {
+    menu.style.display = "none";
+  }
+  
 
   requestAnimationFrame(gameLoop);
 }
-
-requestAnimationFrame(gameLoop);
 

@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@abstract-foundation/agw-react": "^1.6.4",
     "ethers": "^6.13.5",
-    "phaser": "^3.88.2"
+    "web3modal": "^1.9.12"
   }
 }
