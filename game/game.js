@@ -6,6 +6,8 @@ import { drawBackground } from './background.js';
 import { animateCoin } from './level.js';
 import { clearOverlay, showOverlay } from '../menu/overlay.js';
 import { menu } from '../menu/mainMenu.js';
+import { updateLogo, renderLogo, resetLogo } from '../menu/logo.js';
+import { getData, addPoints } from "../client/data.js";
 
 // Set screen size
 GameContext.canvas.width = window.innerWidth;
@@ -17,9 +19,11 @@ let level;
 
 function initGame() {
   player = new Player(20 * GameContext.tileSize, 159);
+  console.log(getData());
+  
   camera = new Camera(player.x, 3 * GameContext.tileSize);
   level = new Level();
-  level.load(level.generateSeed(5));
+  level.load(level.generateSeed(20));
   Input.space = false;
   Input.shift = false;
 }
@@ -28,11 +32,14 @@ export function endGame() {
   clearOverlay();
   initGame();
   GameContext.gameIsRunning = false;
+  resetLogo();
 }
 
 export function startGame() {
   player.speedX = GameContext.scrollingSpeed;
   camera.speedX = GameContext.scrollingSpeed;
+  Input.space = false;
+  Input.shift = false;
   GameContext.gameIsRunning = true;
 }
 
@@ -106,6 +113,8 @@ export function gameLoop(timestamp) {
   }
   if (!GameContext.gameIsRunning) {
     menu.style.display = "block";
+    renderLogo();
+    updateLogo();
   } else {
     menu.style.display = "none";
   }

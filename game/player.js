@@ -46,7 +46,7 @@ export class Player {
     render(camera) {
         //GameContext.ctx.fillStyle = 'blue';
         let positionX = this.x  + camera.renderOffsetX - camera.x;
-        let positionY = this.y  + camera.renderOffsetY - camera.y + 1;
+        let positionY = this.y  + camera.renderOffsetY - camera.y + 3;
 
         if (!GameContext.gameIsRunning) {
             GameContext.ctx.drawImage(standing, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
