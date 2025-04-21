@@ -1,7 +1,7 @@
 import { levelParts } from "./lib.js";
 import { GameContext } from "./lib.js";
 import { Camera } from "./player.js";
-import { playCoinSound } from "./sound.js";
+import { playCoinSound, playUltraCoinSound } from "./sound.js";
 
 const grassBlock = new Image();
 grassBlock.src = "game/assets/grassblock.png";
@@ -45,6 +45,19 @@ for (let i = 1; i <= 27; i++) {
     coinBurstFrames[i-1].onload = () => {};
 }
 
+const ultraCoinFrames = [];
+for (let i = 1; i <= 30; i++) {
+    ultraCoinFrames[i-1] = new Image();
+    ultraCoinFrames[i-1].src = `game/assets/ultracoin/specialcoinrotate${i}.png`
+    ultraCoinFrames[i-1].onload = () => {};
+}
+
+const ultraCoinBurstFrames = [];
+for (let i = 1; i <= 14; i++) {
+    ultraCoinBurstFrames[i-1] = new Image();
+    ultraCoinBurstFrames[i-1].src = `game/assets/ultracoinburst/specialcoinburst${i}.png`
+    ultraCoinBurstFrames[i-1].onload = () => {};
+}
 
 let cFrames = 0;
 export function animateCoin() {
@@ -91,6 +104,7 @@ export class Collectable extends LevelObject {
         this.x = x;
         this.y = y;
         this.endFrames = 0;
+        this.ultra = 1;
     }
 
     render(x, y, camera, level, tileX, tileY) {
@@ -116,6 +130,43 @@ export class Collectable extends LevelObject {
         this.collectable = false;
         playCoinSound();
     }
+}
+
+export class UltraCoin extends LevelObject {
+    constructor(x, y) {
+        super(false, true, false);
+        this.x = x;
+        this.y = y;
+        this.endFrames = 0;
+        this.ultra = 10;
+    }
+
+    render(x, y, camera, level, tileX, tileY) {
+        let positionX = x  + camera.renderOffsetX - camera.x;
+        let positionY = y  + camera.renderOffsetY - camera.y;
+        if (this.collectable) {
+            GameContext.ctx.drawImage(ultraCoinFrames[Math.floor(cFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
+        }
+        else {
+            GameContext.ctx.drawImage(ultraCoinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
+            this.endFrames += 0.5;
+            if (this.endFrames >= 14) {
+                this.delete(level);
+            }
+        }
+    }
+
+    delete(level) {
+        level.grid[this.x][this.y] = null;
+    }
+
+    collect() {
+        this.collectable = false;
+        playUltraCoinSound();
+    }
+
+
+
 }
 
 export class Obstacle extends LevelObject {
@@ -198,7 +249,7 @@ export class Level {
                         break;
                     case 'u':
                         if (!this.ultraCoins) break;
-                        //this.grid[j + offset][rows.length - (i + 1)] = new UltraCoin(j + offset, rows.length - (i + 1));
+                        this.grid[j + offset][rows.length - (i + 1)] = new UltraCoin(j + offset, rows.length - (i + 1));
                         break;
                     case ' ':
                         this.grid[j + offset][rows.length - (i + 1)] = null;

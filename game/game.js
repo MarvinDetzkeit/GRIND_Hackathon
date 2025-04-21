@@ -46,6 +46,10 @@ export function startGame() {
   if (playerData.perks.includes("2x Coin Boost")) {
     player.multiplier = 2;
   }
+  if (playerData.perks.includes("Unlock Ultra Coins")) {
+    level.ultraCoins = true;
+    level.load(level.generateSeed(20));
+  }
   player.speedX = GameContext.scrollingSpeed;
   camera.speedX = GameContext.scrollingSpeed;
   Input.space = false;

@@ -114,7 +114,7 @@ export class Player {
             this.speedY = jumpSpeed - GameContext.gravity;
             playJumpSound();
         }
-        if (this.state === "air" && this.hasDoubleJump && this.canDoubleJump && this.speedY >= 0) {
+        if (this.state === "air" && this.hasDoubleJump && this.canDoubleJump && this.speedY >= -6) {
             this.canDoubleJump = false;
             this.speedY = -18 - GameContext.gravity;
             playJumpSound();
@@ -147,7 +147,12 @@ export class Player {
                 }
                 let x = this.x + (i * this.sizeX) + (abstand - (2 * abstand * i));
                 let y = this.y + (j * this.sizeY / 2);
-                const tile = level.getTile(Math.floor(x / GameContext.tileSize), Math.floor(y / GameContext.tileSize));
+                if (j == 0) {
+                    y += 18;
+                }
+                let tileX = Math.floor(x / GameContext.tileSize);
+                let tileY = Math.floor(y / GameContext.tileSize)
+                const tile = level.getTile(tileX, tileY);
                 if (tile !== null && tile.collidable) {
                     const offset = x % GameContext.tileSize;
                     if (this.speedX > 0) {
@@ -172,12 +177,15 @@ export class Player {
                 }
                 let x = this.x + (i * this.sizeX) + (abstand - (2 * abstand * i));
                 let y = this.y + (j * this.sizeY / 2);
+                if (j == 0) {
+                    y += 18;
+                }
                 let tileX = Math.floor(x / GameContext.tileSize);
                 let tileY = Math.floor(y / GameContext.tileSize)
                 const tile = level.getTile(tileX, tileY);
                 if (tile !== null && tile.collectable) {
                     tile.collect();
-                    this.coins += this.multiplier;
+                    this.coins += this.multiplier * tile.ultra;
                 }
                 if (tile !== null && tile.harmful) {
                     this.handleHit();

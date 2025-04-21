@@ -1,7 +1,7 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-const buffers = {}; // name → AudioBuffer
+const buffers = {};
 let soundsLoaded = false;
 
 async function loadSound(name, path) {
@@ -29,6 +29,10 @@ function play(name, volume = 1.0) {
   export function playCoinSound() {
     play("coin");
   }
+
+  export function playUltraCoinSound() {
+    play("ultracoin");
+  }
   
   export function playJumpSound() {
     play("jump");
@@ -47,7 +51,8 @@ function play(name, volume = 1.0) {
       loadSound("coin", "game/assets/fx/coin.mp3"),
       loadSound("jump", "game/assets/fx/jump.mp3"),
       loadSound("fail", "game/assets/fx/fail.mp3"),
-      loadSound("hit", "game/assets/fx/hit.mp3")
+      loadSound("hit", "game/assets/fx/hit.mp3"),
+      loadSound("ultracoin", "game/assets/fx/ultracoin.mp3")
     ]);
     soundsLoaded = true;
   }
