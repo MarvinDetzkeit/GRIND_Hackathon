@@ -89,7 +89,7 @@ export class Block extends LevelObject {
         let positionX = x  + camera.renderOffsetX - camera.x;
         let positionY = y  + camera.renderOffsetY - camera.y;
         let tile = level.getTile(tileX, tileY-1);
-        if (tile !== null && tile.collidable) {
+        if (tile != null && tile.collidable) {
             GameContext.ctx.drawImage(grassBlockClean, positionX, positionY, GameContext.tileSize, GameContext.tileSize);
         }
         else {
@@ -114,11 +114,12 @@ export class Collectable extends LevelObject {
             GameContext.ctx.drawImage(coinFrames[Math.floor(cFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
         }
         else {
-            GameContext.ctx.drawImage(coinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
-            this.endFrames += 0.5;
             if (this.endFrames >= 27) {
                 this.delete(level);
+                return;
             }
+            GameContext.ctx.drawImage(coinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
+            this.endFrames += 0.5;
         }
     }
 
@@ -148,11 +149,12 @@ export class UltraCoin extends LevelObject {
             GameContext.ctx.drawImage(ultraCoinFrames[Math.floor(cFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
         }
         else {
-            GameContext.ctx.drawImage(ultraCoinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
-            this.endFrames += 0.5;
             if (this.endFrames >= 14) {
                 this.delete(level);
+                return;
             }
+            GameContext.ctx.drawImage(ultraCoinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
+            this.endFrames += 0.5;
         }
     }
 
@@ -178,7 +180,7 @@ export class Obstacle extends LevelObject {
 
     render(x, y, camera, level, tileX, tileY) {
         let tile = level.getTile(tileX, tileY + 1);
-        if (tile !== null && tile.collidable) {
+        if (tile != null && tile.collidable) {
             this.renderCactus(x, y, camera);
         }
         else {
@@ -218,9 +220,11 @@ export class Level {
     constructor() {
         this.height = 5
         this.ultraCoins = false;
+        this.length = 0;
     }
 
     getTile(x, y) {
+        try {
         if (x < 0 || y < 0 || x >= this.length) {
             return null;
         }
@@ -231,10 +235,15 @@ export class Level {
             return this.grid[x][y];
         }
     }
+    catch (e) {
+        console.log("x: %d, y: %d, current length: ", x, y, this.length);
+        throw e;
+    }
+    }
 
     loadPart(part, offset) {
         const rows = levelParts[part].split("\n");
-        offset = offset * 20;
+        offset = 20 * offset;
         for (let i = 0; i < rows.length; i++) {
             for (let j = 0; j < rows[i].length; j++) {
                 switch (rows[rows.length - 1 - i][j]) {
@@ -263,21 +272,71 @@ export class Level {
     }
 
     load(seed) {
-        this.length = 20 * seed.length;
-        this.grid = Array.from({ length: this.length }, () => 
+        this.grid = Array.from({ length: 20 * seed.length }, () => 
             Array(this.height).fill(null)
           );
         for (let i = 0; i < seed.length; i++) {
+            this.length += 20;
             this.loadPart(seed[i], i);
         }
     }
 
+    setBack(currentPart, player, camera) {
+        if (currentPart < 8) return;
+    
+        console.log("Setting back player...");
+        console.log("camera.x: %d, player.x: %d", camera.x, player.x);
+    
+        // Deep copy individual tile values from previous/current/next part
+        const sourceParts = [currentPart - 1, currentPart, currentPart + 1];
+        for (let part = 0; part < 3; part++) {
+            const sourceBase = sourceParts[part] * 20;
+            const targetBase = part * 20;
+            for (let i = 0; i < 20; i++) {
+                const sourceRow = this.grid[sourceBase + i];
+                const targetRow = [];
+    
+                for (let y = 0; y < this.height; y++) {
+                    const tile = sourceRow[y];
+                    if (tile == null || tile.collidable || tile.harmful) {
+                        targetRow[y] = tile;
+                    }
+                    else if (tile.collectable) {
+                        if (tile.ultra === 10) {
+                            targetRow[y] = new UltraCoin(targetBase+i, y);
+                        }
+                        else {
+                            targetRow[y] = new Collectable(targetBase+i, y);
+                        }
+                    }
+                }
+    
+                this.grid[targetBase + i] = targetRow;
+            }
+        }
+    
+        const offset = (currentPart - 1) * GameContext.tileSize * 20;
+        player.x -= offset;
+        camera.x -= offset;
+    
+        console.log("After setting back");
+        console.log("camera.x: %d, player.x: %d", camera.x, player.x);
+    
+        // Load new level parts into slots 3–10
+        for (let partIndex = 3; partIndex <= 10; partIndex++) {
+            const randomPartId = Math.floor(Math.random() * (levelParts.length - 3)) + 3;
+            this.loadPart(0, partIndex);
+        }
+    }
+    
+    
+
     render(camera) {
         let tileX = Math.floor(camera.x / GameContext.tileSize);
         for (let i = -13; i < 14; i++) {
-            for (let j = 0; j < 10; j++) {
+            for (let j = 0; j < 11; j++) {
                 let tile = this.getTile(tileX + i, j);
-                if (tile !== null) { //render if tile exists at position
+                if (tile != null) { //render if tile exists at position
                     tile.render((i + tileX) * GameContext.tileSize, j * GameContext.tileSize, camera, this, tileX + i, j);
                 }
             }
@@ -287,9 +346,8 @@ export class Level {
 
     generateSeed(count) {
         let n = levelParts.length;
-        //return Array.from({ length: n }, (_, i) => i);
         const arr = Array.from({ length: count + 4 }, () =>
-          Math.floor(Math.random() * (n-3)) + 3
+          0//Math.floor(Math.random() * (n-3)) + 3
         );
         arr[0] = 0;
         arr[1] = 0;

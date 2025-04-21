@@ -8,19 +8,61 @@ import { playJumpSound, playHitSound, playFailSound } from './sound.js';
 const jumpSpeed = -20;
 const slideTime = 30;
 
-const standing = new Image();
-standing.src = "game/assets/slide/HamsterStanding.png";
-standing.onload = () => {};
-
-const sliding = new Image();
-sliding.src = "game/assets/slide/HamsterSliding.png";
-sliding.onload = () => {};
-
-const running = [];
+//Hamster Frames
+const standingH = [];
 for (let i = 1; i <= 2; i++) {
-    running[i-1] = new Image();
-    running[i-1].src = `game/assets/walk/HamsterRunning${i}.png`;
-    running[i-1].onload = () => {};
+    standingH[i-1] = new Image();
+    standingH[i-1].src = `game/assets/stand/HamsterStanding${i}.png`;
+    standingH[i-1].onload = () => {};
+}
+
+const slidingH = new Image();
+slidingH.src = "game/assets/slide/HamsterSliding.png";
+slidingH.onload = () => {};
+
+const runningH = [];
+for (let i = 1; i <= 2; i++) {
+    runningH[i-1] = new Image();
+    runningH[i-1].src = `game/assets/walk/HamsterRunning${i}.png`;
+    runningH[i-1].onload = () => {};
+}
+
+//Bear Frames
+const standingB = [];
+for (let i = 1; i <= 2; i++) {
+    standingB[i-1] = new Image();
+    standingB[i-1].src = `game/assets/stand/BearStanding${i}.png`;
+    standingB[i-1].onload = () => {};
+}
+
+const slidingB = new Image();
+slidingB.src = "game/assets/slide/BearSliding.png";
+slidingB.onload = () => {};
+
+const runningB = [];
+for (let i = 1; i <= 2; i++) {
+    runningB[i-1] = new Image();
+    runningB[i-1].src = `game/assets/walk/BearRunning${i}.png`;
+    runningB[i-1].onload = () => {};
+}
+
+//Frog Frames
+const standingF = [];
+for (let i = 1; i <= 2; i++) {
+    standingF[i-1] = new Image();
+    standingF[i-1].src = `game/assets/stand/FrogStandingMask${i}.png`;
+    standingF[i-1].onload = () => {};
+}
+
+const slidingF = new Image();
+slidingF.src = "game/assets/slide/FrogSlidingMask.png";
+slidingF.onload = () => {};
+
+const runningF = [];
+for (let i = 1; i <= 2; i++) {
+    runningF[i-1] = new Image();
+    runningF[i-1].src = `game/assets/walk/FrogRunningMask${i}.png`;
+    runningF[i-1].onload = () => {};
 }
 
 export class Player {
@@ -40,11 +82,14 @@ export class Player {
         this.iFrames = 0;
         this.slideFrames = -slideTime;
         this.rFrames = 0;
+        this.standFrames = 0;
         this.coins = 0;
 
         this.multiplier = 1;
         this.hasDoubleJump = false;
         this.canDoubleJump = false;
+
+        this.currentChar = "H";
     }
 
     render(camera) {
@@ -52,24 +97,57 @@ export class Player {
         let positionX = this.x  + camera.renderOffsetX - camera.x;
         let positionY = this.y  + camera.renderOffsetY - camera.y + 3;
 
+        if (this.currentChar === "H") { 
+
         if (!GameContext.gameIsRunning) {
-            GameContext.ctx.drawImage(standing, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+            GameContext.ctx.drawImage(standingH[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
             return;
         }
         if (this.slideFrames > 0) {
-            GameContext.ctx.drawImage(sliding, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+            GameContext.ctx.drawImage(slidingH, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
         }
         else {
-            GameContext.ctx.drawImage(running[Math.floor(this.rFrames)], positionX, positionY,  GameContext.tileSize, GameContext.tileSize * 1.5);
+            GameContext.ctx.drawImage(runningH[Math.floor(this.rFrames)], positionX, positionY,  GameContext.tileSize, GameContext.tileSize * 1.5);
         }
-        
+    }
+
+    if (this.currentChar === "B") { 
+
+        if (!GameContext.gameIsRunning) {
+            GameContext.ctx.drawImage(standingB[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+            return;
+        }
+        if (this.slideFrames > 0) {
+            GameContext.ctx.drawImage(slidingB, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+        }
+        else {
+            GameContext.ctx.drawImage(runningB[Math.floor(this.rFrames)], positionX, positionY,  GameContext.tileSize, GameContext.tileSize * 1.5);
+        }
+    }
+
+    if (this.currentChar === "F") { 
+
+        if (!GameContext.gameIsRunning) {
+            GameContext.ctx.drawImage(standingF[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+            return;
+        }
+        if (this.slideFrames > 0) {
+            GameContext.ctx.drawImage(slidingF, positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
+        }
+        else {
+            GameContext.ctx.drawImage(runningF[Math.floor(this.rFrames)], positionX, positionY,  GameContext.tileSize, GameContext.tileSize * 1.5);
+        }
+    }
     }
 
     updateFrames() {
         this.rFrames += 0.125;
-        if (this.rFrames >= 2) {
-            this.rFrames = 0;
-        }
+        if (this.rFrames >= 2) this.rFrames = 0;
+    }
+
+    updateStandFrames() {
+        this.standFrames += (1 / 96);
+        if (this.standFrames >= 2) this.standFrames = 0;
     }
 
     gravity() {
@@ -153,7 +231,7 @@ export class Player {
                 let tileX = Math.floor(x / GameContext.tileSize);
                 let tileY = Math.floor(y / GameContext.tileSize)
                 const tile = level.getTile(tileX, tileY);
-                if (tile !== null && tile.collidable) {
+                if (tile != null && tile.collidable) {
                     const offset = x % GameContext.tileSize;
                     if (this.speedX > 0) {
                         this.x -= offset + 1;
@@ -183,14 +261,14 @@ export class Player {
                 let tileX = Math.floor(x / GameContext.tileSize);
                 let tileY = Math.floor(y / GameContext.tileSize)
                 const tile = level.getTile(tileX, tileY);
-                if (tile !== null && tile.collectable) {
+                if (tile != null && tile.collectable) {
                     tile.collect();
                     this.coins += this.multiplier * tile.ultra;
                 }
-                if (tile !== null && tile.harmful) {
+                if (tile != null && tile.harmful) {
                     this.handleHit();
                 }
-                if (tile !== null && tile.collidable) {
+                if (tile != null && tile.collidable) {
                     const offset = y % GameContext.tileSize;
                     if (this.speedY > 0) {
                         this.y -= offset + 1;

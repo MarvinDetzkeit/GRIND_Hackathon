@@ -2,7 +2,7 @@ import { GameContext } from './lib.js';
 import { Player } from './player.js';
 import { Camera } from './player.js';
 import { Level } from './level.js';
-import { drawBackground } from './background.js';
+import { drawBackground, scrollClouds, drawClouds } from './background.js';
 import { animateCoin } from './level.js';
 import { clearOverlay, showOverlay } from '../menu/overlay.js';
 import { menu } from '../menu/mainMenu.js';
@@ -18,12 +18,12 @@ let camera;
 let level;
 
 function initGame() {
-  player = new Player(20 * GameContext.tileSize, 159);
+  player = new Player(20 * GameContext.tileSize, 223);
   console.log(getData());
   
-  camera = new Camera(player.x, 3 * GameContext.tileSize);
+  camera = new Camera(player.x, 4 * GameContext.tileSize);
   level = new Level();
-  level.load(level.generateSeed(20));
+  level.load(level.generateSeed(10));
   Input.space = false;
   Input.shift = false;
 }
@@ -48,7 +48,7 @@ export function startGame() {
   }
   if (playerData.perks.includes("Unlock Ultra Coins")) {
     level.ultraCoins = true;
-    level.load(level.generateSeed(20));
+    level.load(level.generateSeed(10));
   }
   player.speedX = GameContext.scrollingSpeed;
   camera.speedX = GameContext.scrollingSpeed;
@@ -64,6 +64,9 @@ function update() {
     endGame();
   }
   animateCoin();
+
+  let currentPart = camera.x / (GameContext.tileSize * 20);
+  level.setBack(currentPart, player, camera);
 }
 
 function handleInputs() {
@@ -82,6 +85,7 @@ function handleInputs() {
 
 function render() {
   drawBackground();
+  drawClouds();
   level.render(camera);
   player.render(camera);
 }
@@ -114,6 +118,7 @@ export function gameLoop(timestamp) {
     lastTime = timestamp;
     handleInputs();
     update();
+    scrollClouds();
     if (!GameContext.gameIsRunning) {
       endGame();
     }
@@ -128,7 +133,10 @@ export function gameLoop(timestamp) {
   if (!GameContext.gameIsRunning) {
     menu.style.display = "block";
     renderLogo();
-    updateLogo();
+    if (delta >= timestep) {
+      updateLogo();
+      player.updateStandFrames();
+    }
   } else {
     menu.style.display = "none";
   }

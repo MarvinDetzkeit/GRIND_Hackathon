@@ -16,15 +16,15 @@ export const Input = {
 
 export const levelParts = [
   `                    \n` +
-  `bbbbbbbbbbbbbbbbbbbb\n` +
-  `             uuuuuuu\n` +
   `                    \n` +
-  `bbbbbbbbbbbbbbbbbbbb`,
+  `                    \n` +
+  `                    \n` +
+  `                    `,
 
   `        bbbbbbbbbbbb\n` +
   `       cbbbbbbbbbbbb\n` +
-  `      c bbbbbbbbbbbb\n` +
-  `     c  bbbbbbbbbbbb\n` +
+  `      c             \n` +
+  `     c ccccccccccccc\n` +
   `bbbbbbbbbbbbbbbbbbbb`,
 
   `bbbbbbbbbbbbbbbbbbbb\n` +
