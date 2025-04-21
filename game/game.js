@@ -36,6 +36,16 @@ export function endGame() {
 }
 
 export function startGame() {
+  const playerData = getData();
+  if (playerData.perks.includes("Double Jump")) {
+    player.hasDoubleJump = true;
+  }
+  if (playerData.perks.includes("+2 HP")) {
+    player.hp += 2;
+  }
+  if (playerData.perks.includes("2x Coin Boost")) {
+    player.multiplier = 2;
+  }
   player.speedX = GameContext.scrollingSpeed;
   camera.speedX = GameContext.scrollingSpeed;
   Input.space = false;

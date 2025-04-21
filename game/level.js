@@ -32,24 +32,24 @@ for (let i = 1; i <= 6; i++) {
 }
 
 const coinFrames = [];
-for (let i = 1; i <= 4; i++) {
+for (let i = 1; i <= 30; i++) {
     coinFrames[i-1] = new Image();
-    coinFrames[i-1].src = `game/assets/coin/coin${i}.png`
+    coinFrames[i-1].src = `game/assets/coin/grindcoin${i}.png`
     coinFrames[i-1].onload = () => {};
 }
 
 const coinBurstFrames = [];
-for (let i = 1; i <= 6; i++) {
+for (let i = 1; i <= 27; i++) {
     coinBurstFrames[i-1] = new Image();
-    coinBurstFrames[i-1].src = `game/assets/coinburst/coinburst${i}.png`
+    coinBurstFrames[i-1].src = `game/assets/coinburst/burst${i}.png`
     coinBurstFrames[i-1].onload = () => {};
 }
 
 
 let cFrames = 0;
 export function animateCoin() {
-    cFrames += (1 / 8);
-    if (cFrames >= 4) {
+    cFrames += 0.5;
+    if (cFrames >= 30) {
         cFrames = 0;
     }
 }
@@ -101,8 +101,8 @@ export class Collectable extends LevelObject {
         }
         else {
             GameContext.ctx.drawImage(coinBurstFrames[Math.floor(this.endFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize);
-            this.endFrames += (1 / 4);
-            if (this.endFrames >= 5) {
+            this.endFrames += 0.5;
+            if (this.endFrames >= 27) {
                 this.delete(level);
             }
         }
@@ -165,7 +165,8 @@ const obstacle = new Obstacle();
 
 export class Level {
     constructor() {
-        this.height = 5       
+        this.height = 5
+        this.ultraCoins = false;
     }
 
     getTile(x, y) {
@@ -194,6 +195,10 @@ export class Level {
                         break;
                     case 'o':
                         this.grid[j + offset][rows.length - (i + 1)] = obstacle;
+                        break;
+                    case 'u':
+                        if (!this.ultraCoins) break;
+                        //this.grid[j + offset][rows.length - (i + 1)] = new UltraCoin(j + offset, rows.length - (i + 1));
                         break;
                     case ' ':
                         this.grid[j + offset][rows.length - (i + 1)] = null;

@@ -41,6 +41,10 @@ export class Player {
         this.slideFrames = -slideTime;
         this.rFrames = 0;
         this.coins = 0;
+
+        this.multiplier = 1;
+        this.hasDoubleJump = false;
+        this.canDoubleJump = false;
     }
 
     render(camera) {
@@ -110,6 +114,11 @@ export class Player {
             this.speedY = jumpSpeed - GameContext.gravity;
             playJumpSound();
         }
+        if (this.state === "air" && this.hasDoubleJump && this.canDoubleJump && this.speedY >= 0) {
+            this.canDoubleJump = false;
+            this.speedY = -18 - GameContext.gravity;
+            playJumpSound();
+        }
     }
 
     handleHit() {
@@ -168,7 +177,7 @@ export class Player {
                 const tile = level.getTile(tileX, tileY);
                 if (tile !== null && tile.collectable) {
                     tile.collect();
-                    this.coins++;
+                    this.coins += this.multiplier;
                 }
                 if (tile !== null && tile.harmful) {
                     this.handleHit();
@@ -189,6 +198,7 @@ export class Player {
         }
         if (touchedGround) {
             this.state = "ground";
+            this.canDoubleJump = true;
         }
         else {
             this.state = "air";

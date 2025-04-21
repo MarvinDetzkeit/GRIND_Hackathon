@@ -1,7 +1,7 @@
 let data;
 
 export function setData(newData) {
-    data= newData;
+    data = newData;
 }
 
 export function addPoints(newPoints) {
@@ -18,6 +18,15 @@ export function addPerk(newPerk) {
         return false;
     }
     data.perks.push(newPerk);r
+    return true;
+}
+
+export function addSkin(newSkin) {
+    if (data.skins.includes(newSkin)) {
+        console.log("Player already has skin: ", newSkin);
+        return false;
+    }
+    data.skins.push(newSkin);
     return true;
 }
 

@@ -1,0 +1,88 @@
+{
+  "version": "3.4",
+  "log": [
+    {
+      "contracts/GrindRun.sol:GrindRun": {
+        "src": "contracts/GrindRun.sol:18",
+        "version": {
+          "withMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da",
+          "withoutMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da",
+          "linkedWithoutMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da"
+        },
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "(address)",
+          "buyPerk(string)",
+          "buySkin(string)",
+          "rewardTopPlayers(address[])"
+        ],
+        "linkReferences": [],
+        "errors": [
+          {
+            "kind": "constructor",
+            "contract": "GrindRun",
+            "src": "contracts/GrindRun.sol:23"
+          }
+        ],
+        "layout": {
+          "storage": [
+            {
+              "contract": "GrindRun",
+              "label": "treasury",
+              "type": "t_address",
+              "src": "contracts/GrindRun.sol:19"
+            },
+            {
+              "contract": "GrindRun",
+              "label": "owner",
+              "type": "t_address",
+              "src": "contracts/GrindRun.sol:20"
+            },
+            {
+              "contract": "GrindRun",
+              "label": "grindToken",
+              "type": "t_contract(IERC20)52",
+              "src": "contracts/GrindRun.sol:21"
+            }
+          ],
+          "types": {
+            "t_address": {
+              "label": "address"
+            },
+            "t_contract(IERC20)52": {
+              "label": "contract IERC20"
+            }
+          },
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.28"
+      },
+      "contracts/GrindRun.sol:IERC20": {
+        "src": "contracts/GrindRun.sol:4",
+        "inherit": [],
+        "libraries": [],
+        "methods": [
+          "totalSupply()",
+          "balanceOf(address)",
+          "transfer(address,uint256)",
+          "allowance(address,address)",
+          "approve(address,uint256)",
+          "transferFrom(address,address,uint256)"
+        ],
+        "linkReferences": [],
+        "errors": [],
+        "layout": {
+          "storage": [],
+          "types": {},
+          "layoutVersion": "1.2",
+          "flat": false,
+          "namespaces": {}
+        },
+        "solcVersion": "0.8.28"
+      }
+    }
+  ]
+}

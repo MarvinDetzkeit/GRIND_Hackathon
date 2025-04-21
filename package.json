@@ -12,6 +12,7 @@
   "dependencies": {
     "@abstract-foundation/agw-react": "^1.6.4",
     "ethers": "^6.13.5",
-    "web3modal": "^1.9.12"
+    "web3modal": "^1.9.12",
+    "zksync-ethers": "^6.17.0"
   }
 }
