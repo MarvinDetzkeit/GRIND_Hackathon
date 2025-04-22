@@ -23,7 +23,7 @@ function playLoopingMusic(name) {
   source.loop = true;
 
   const gain = audioCtx.createGain();
-  gain.gain.value = 0.3;
+  gain.gain.value = 0.2;
 
   source.connect(gain).connect(audioCtx.destination);
   source.start(0);
@@ -78,11 +78,11 @@ function play(name, volume = 1.0) {
   }
 
   export function playCoinSound() {
-    play("coin", 0.3);
+    play("coin", 0.2);
   }
 
   export function playUltraCoinSound() {
-    play("ultracoin", 0.3);
+    play("ultracoin", 0.2);
   }
   
   export function playJumpSound() {
@@ -94,7 +94,7 @@ function play(name, volume = 1.0) {
   }
 
   export function playHitSound() {
-    play("hit");
+    play("hit", 1.2);
   }
   
   export async function loadAllSounds() {
