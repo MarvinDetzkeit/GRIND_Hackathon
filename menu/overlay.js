@@ -3,7 +3,7 @@ import { GameContext } from "../game/lib.js";
 import { getData } from "../client/data.js";
 
 const heart = new Image();
-heart.src = "../game/assets/heart.png";
+heart.src = "/game/assets/heart.png";
 
 const coinCount = document.createElement("div");
 coinCount.style.position = "absolute";
