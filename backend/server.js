@@ -31,6 +31,12 @@ if (rawWs) {
   });
 }
 
+setInterval(() => {
+  provider.getBlockNumber().catch(err => {
+    console.error("WebSocket keep-alive failed:", err);
+    process.exit(1); // or reconnectProvider()
+  });
+}, 30000);
 
 
 const wallet = new Wallet(privateKey, provider);
