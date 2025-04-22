@@ -88,6 +88,7 @@ export class Player {
         this.multiplier = 1;
         this.hasDoubleJump = false;
         this.canDoubleJump = false;
+        this.coinAmountMultiplier = 1;
 
         this.currentChar = "Hamster";
     }
@@ -206,7 +207,7 @@ export class Player {
     handleHit() {
         if (this.iFrames <= 0) {
         this.hp -= 1;
-        this.iFrames = 60;
+        this.iFrames = 30;
         if (this.hp <= 0) {
             GameContext.gameIsRunning = false;
             playFailSound();
@@ -267,7 +268,8 @@ export class Player {
                 const tile = level.getTile(tileX, tileY);
                 if (tile != null && tile.collectable) {
                     tile.collect();
-                    this.coins += this.multiplier * tile.ultra;
+                    this.coinAmountMultiplier = 1 + (Math.floor(this.coins / 10) * (1 / 64));
+                    this.coins += this.multiplier * tile.ultra * this.coinAmountMultiplier;
                 }
                 if (tile != null && tile.harmful) {
                     this.handleHit();
@@ -314,10 +316,10 @@ export class Camera {
         this.y = y;
         this.renderOffsetX = GameContext.canvas.width / 2;
         this.renderOffsetY = GameContext.canvas.height / 2;
+        this.speedX = 0;
     }
 
-    move(x, y) {
-        this.x += x;
-        this.y += y;
+    move() {
+        this.x += this.speedX;
     }
 }

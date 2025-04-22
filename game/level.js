@@ -201,7 +201,7 @@ export class Obstacle extends LevelObject {
     }
 
     refreshAnimation() {
-        this.fFrames += (1 / 8);
+        this.fFrames += (1 / 16);
         if (this.fFrames >= 4) {
             this.fFrames = 0;
         }

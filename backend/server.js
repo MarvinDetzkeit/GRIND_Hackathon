@@ -2,9 +2,10 @@ import express from "express";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
-import { JsonRpcProvider, Wallet, Contract } from "ethers";
+import { WebSocketProvider, Wallet, Contract, verifyMessage } from "ethers";
 import grindRunAbi from "./abi/GrindRun.js";
 import dotenv from "dotenv";
+import cron from "node-cron";
 
 dotenv.config();
 
@@ -12,19 +13,16 @@ const contractAddress = "0x30c032Ebe7CC83e65FCB6F9f06F6a9EC4390B234";
 const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
 const rpcUrl = process.env.RPC_URL;
 
-const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-const wallet = new ethers.Wallet(privateKey, provider);
-
-const contract = new ethers.Contract(contractAddress, grindRunAbi, wallet);
+const provider = new WebSocketProvider(process.env.WSS_URL);
+const wallet = new Wallet(privateKey, provider);
+const contract = new Contract(contractAddress, grindRunAbi, wallet);
 
 const PLAYER_DATA_DIR = "./playerData";
 if (!fs.existsSync(PLAYER_DATA_DIR)) fs.mkdirSync(PLAYER_DATA_DIR);
 
-
 const app = express();
-app.use(cors());                // allow frontend requests
-app.use(express.json());        // parse JSON bodies
-
+app.use(cors());
+app.use(express.json());
 
 app.post("/auth/login", (req, res) => {
   console.log("Received login request:", req.body);
@@ -34,11 +32,9 @@ app.post("/auth/login", (req, res) => {
     return res.status(400).json({ error: "Missing walletAddress, signature or message" });
   }
 
-  // Verify that the wallet signed the message
   let recovered;
   try {
-    recovered = ethers.verifyMessage(message, signature);
-    //recovered = ethers.utils.verifyMessage(message, signature);
+    recovered = verifyMessage(message, signature);
   } catch (err) {
     return res.status(400).json({ error: "Signature verification failed" });
   }
@@ -125,3 +121,16 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Backend listening on http://localhost:${PORT}`);
 });
+
+// Schedule rewardPlayers on April 25, 2025 at 7PM Berlin Time
+cron.schedule('0 17 25 4 *', async () => {
+  console.log("Triggering rewardPlayers()");
+  try {
+    const tx = await contract.rewardPlayers();
+    await tx.wait();
+    console.log("rewardPlayers executed successfully");
+  } catch (err) {
+    console.error("Failed to execute rewardPlayers:", err);
+  }
+});
+

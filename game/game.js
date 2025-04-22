@@ -4,7 +4,7 @@ import { Camera } from './player.js';
 import { Level } from './level.js';
 import { drawBackground, scrollClouds, drawClouds } from './background.js';
 import { animateCoin } from './level.js';
-import { clearOverlay, showOverlay } from '../menu/overlay.js';
+import { clearOverlay, showOverlay, showMenuOverlay, clearMenuOverlay } from '../menu/overlay.js';
 import { menu } from '../menu/mainMenu.js';
 import { updateLogo, renderLogo, resetLogo } from '../menu/logo.js';
 import { getData, addPoints } from "../client/data.js";
@@ -34,6 +34,7 @@ function initGame() {
 
 export function endGame() {
   clearOverlay();
+  player.coins = Math.floor(player.coins);
   if (player.coins > 0) sendToBackend({walletAddress: getWalletAddress(), newCoins: player.coins}, "/grinded/coins");
   initGame();
   GameContext.gameIsRunning = false;
@@ -45,6 +46,7 @@ export function startGame() {
     alert("You need to select a skin.");
     return;
   }
+  clearMenuOverlay();
   const playerData = getData();
   player.setSkin(playerData.selectedSkin);
   if (playerData.perks.includes("Double Jump")) {
@@ -71,7 +73,7 @@ export function startGame() {
 
 function update() {
   player.update(level);
-  camera.x += GameContext.scrollingSpeed;
+  camera.move();
   if ((camera.x - player.x - player.sizeX) > (GameContext.canvas.width / 2)) {
     endGame();
   }
@@ -147,6 +149,7 @@ export function gameLoop(timestamp) {
   if (!GameContext.gameIsRunning) {
     menu.style.display = "block";
     renderLogo();
+    showMenuOverlay();
     if (delta >= timestep) {
       player.setSkin(getData().selectedSkin);
       updateLogo();
