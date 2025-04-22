@@ -17,16 +17,20 @@ const rpcUrl = process.env.RPC_URL;
 
 const provider = new WebSocketProvider(process.env.WSS_URL);
 
-// Restart process if WebSocket dies
-provider.on("error", (err) => {
-  console.error("WebSocketProvider error:", err);
-  process.exit(1);
-});
+const rawWs = provider._provider?._websocket;
 
-provider.on("close", (code) => {
-  console.error("WebSocketProvider closed. Code:", code);
-  process.exit(1);
-});
+if (rawWs) {
+  rawWs.on("close", (code) => {
+    console.error("WebSocket closed with code:", code);
+    process.exit(1);
+  });
+
+  rawWs.on("error", (err) => {
+    console.error("WebSocket error:", err);
+    process.exit(1);
+  });
+}
+
 
 
 const wallet = new Wallet(privateKey, provider);
