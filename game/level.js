@@ -264,7 +264,7 @@ export class Level {
                         this.grid[j + offset][rows.length - (i + 1)] = null;
                         break;
                     default:
-                        throw new Error(`Unknown tile '${rows[rows.length - 1 - i][j]}'`);
+                        this.grid[j + offset][rows.length - (i + 1)] = null;
                         break;
                 }
             }
@@ -283,9 +283,6 @@ export class Level {
 
     setBack(currentPart, player, camera) {
         if (currentPart < 8) return;
-    
-        console.log("Setting back player...");
-        console.log("camera.x: %d, player.x: %d", camera.x, player.x);
     
         // Deep copy individual tile values from previous/current/next part
         const sourceParts = [currentPart - 1, currentPart, currentPart + 1];
@@ -319,12 +316,9 @@ export class Level {
         player.x -= offset;
         camera.x -= offset;
     
-        console.log("After setting back");
-        console.log("camera.x: %d, player.x: %d", camera.x, player.x);
-    
         // Load new level parts into slots 3–10
         for (let partIndex = 3; partIndex <= 10; partIndex++) {
-            const randomPartId = Math.floor(Math.random() * (levelParts.length - 3)) + 3;
+            const randomPartId = Math.floor(Math.random() * (levelParts.length - 1)) + 1;
             this.loadPart(randomPartId, partIndex);
         }
     }
@@ -333,8 +327,8 @@ export class Level {
 
     render(camera) {
         let tileX = Math.floor(camera.x / GameContext.tileSize);
-        for (let i = -13; i < 14; i++) {
-            for (let j = 0; j < 11; j++) {
+        for (let i = -19; i < 20; i++) {
+            for (let j = 0; j < 15; j++) {
                 let tile = this.getTile(tileX + i, j);
                 if (tile != null) { //render if tile exists at position
                     tile.render((i + tileX) * GameContext.tileSize, j * GameContext.tileSize, camera, this, tileX + i, j);
@@ -347,13 +341,10 @@ export class Level {
     generateSeed(count) {
         let n = levelParts.length;
         const arr = Array.from({ length: count + 4 }, () =>
-          Math.floor(Math.random() * (n-3)) + 3
+          Math.floor(Math.random() * (n-1)) + 1
         );
         arr[0] = 0;
         arr[1] = 0;
-        arr[arr.length - 2] = 1;
-        arr[arr.length - 1] = 2;
-        console.log(arr);
         return arr;
       }
 }

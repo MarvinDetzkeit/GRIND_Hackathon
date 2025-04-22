@@ -9,7 +9,7 @@ const coinCount = document.createElement("div");
 coinCount.style.position = "absolute";
 coinCount.style.top = "10px";
 coinCount.style.left = "10px";
-coinCount.style.color = "white";
+coinCount.style.color = "grey";
 coinCount.style.fontFamily = "monospace";
 coinCount.style.fontSize = "18px";
 coinCount.style.zIndex = "10";
@@ -28,7 +28,7 @@ bonusText.style.position = "absolute";
 bonusText.style.top = "10px";
 bonusText.style.left = "50%";
 bonusText.style.transform = "translateX(-50%)";
-bonusText.style.color = "white";
+bonusText.style.color = "grey";
 bonusText.style.fontFamily = "monospace";
 bonusText.style.fontSize = "18px";
 bonusText.style.zIndex = "10";
@@ -45,7 +45,7 @@ export function showOverlay(player) {
         hpContainer.appendChild(img);
     }
 
-    bonusText.textContent = `Coin Bonus: +${(player.coinAmountMultiplier - 1) * 100}%`;
+    bonusText.textContent = `Coin Bonus: +${100 * (player.multiplier - 1) + (player.multiplier * ((player.coinAmountMultiplier - 1) * 100))}%`;
 
     document.body.appendChild(coinCount);
     document.body.appendChild(hpContainer);
@@ -68,7 +68,7 @@ const seasonText = document.createElement("div");
 seasonText.style.position = "absolute";
 seasonText.style.top = "10px";
 seasonText.style.left = "10px";
-seasonText.style.color = "white";
+seasonText.style.color = "grey";
 seasonText.style.fontFamily = "monospace";
 seasonText.style.fontSize = "14px";
 seasonText.style.zIndex = "10";
@@ -78,7 +78,7 @@ const loggedInText = document.createElement("div");
 loggedInText.style.position = "absolute";
 loggedInText.style.top = "10px";
 loggedInText.style.right = "10px";
-loggedInText.style.color = "white";
+loggedInText.style.color = "grey";
 loggedInText.style.fontFamily = "monospace";
 loggedInText.style.fontSize = "14px";
 loggedInText.style.zIndex = "10";

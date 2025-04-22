@@ -74,8 +74,13 @@ perksBtn.onclick = async () => {
 };
 
 const leaderboardBtn = document.createElement("button");
-leaderboardBtn.textContent = "Leaderboard";
-leaderboardBtn.onclick = () => switchMenu(leaderboardMenu);
+leaderboardBtn.textContent = "Score";
+leaderboardBtn.onclick = async () => {
+  switchMenu(scoreMenu);
+  //scoreMenu.innerHTML = "";
+  await loadScoreMenu();
+};
+
 
 [ startBtn, skinsBtn, perksBtn, leaderboardBtn ].forEach(btn => {
   btn.style.margin = "10px";
@@ -274,12 +279,51 @@ backFromPerks.onclick = () => switchMenu(mainMenu);
 backFromPerks.style.marginTop = "10px";
 perksMenu.appendChild(backFromPerks);
 
-// ========== Leaderboard Menu ==========
-const leaderboardMenu = document.createElement("div");
-const backFromLeaderboard = document.createElement("button");
-backFromLeaderboard.textContent = "Back";
-backFromLeaderboard.onclick = () => switchMenu(mainMenu);
-leaderboardMenu.appendChild(backFromLeaderboard);
+// ========== Score Menu ==========
+const scoreMenu = document.createElement("div");
+scoreMenu.style.color = "white";
+scoreMenu.style.fontFamily = "monospace";
+scoreMenu.style.padding = "20px";
+
+const title = document.createElement("h2");
+title.textContent = "Your Score";
+scoreMenu.appendChild(title);
+
+const info = document.createElement("div");
+info.textContent = "Loading...";
+scoreMenu.appendChild(info);
+
+const backFromScore = document.createElement("button");
+backFromScore.textContent = "Back";
+backFromScore.onclick = () => switchMenu(mainMenu); // Assumes mainMenu is in scope
+scoreMenu.appendChild(backFromScore);
+
+// Function to fetch score data from server
+export async function loadScoreMenu() {
+    const data = getData();
+    try {
+        const response = await sendToBackend({walletAddress: data.walletAddress}, "/score/info");
+
+        const {
+            treasuryBalance,
+            totalCoins,
+            playerCoins,
+            percent,
+            grindReward
+        } = response;
+
+        info.innerHTML = `
+            <p>Total Treasury Balance: ${treasuryBalance} $GRIND</p>
+            <p>Total Coins (all players): ${totalCoins}</p>
+            <p>Your Coins: ${playerCoins}</p>
+            <p>Your Share: ${percent.toFixed(2)}%</p>
+            <p>Expected Reward: ${grindReward.toFixed(2)} $GRIND</p>
+        `;
+    } catch (err) {
+        info.textContent = "Failed to load score data.";
+        console.error(err);
+    }
+}
 
 // ========== Start Game Menu ==========
 const startGameMenu = document.createElement("div");
@@ -302,7 +346,7 @@ startGameMenu.appendChild(startGameBtn);
 
 // ========== Menu Switching ==========
 function switchMenu(target) {
-  [mainMenu, skinsMenu, perksMenu, leaderboardMenu].forEach(menu => {
+  [mainMenu, skinsMenu, perksMenu, scoreMenu].forEach(menu => {
     menu.style.display = "none";
   });
   target.style.display = "block";
@@ -312,6 +356,6 @@ menu.appendChild(startGameMenu);
 menu.appendChild(mainMenu);
 menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
-menu.appendChild(leaderboardMenu);
+menu.appendChild(scoreMenu);
 
 switchMenu(startGameMenu); // Default screen

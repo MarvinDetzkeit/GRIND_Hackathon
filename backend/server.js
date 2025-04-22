@@ -4,8 +4,10 @@ import fs from "fs";
 import path from "path";
 import { WebSocketProvider, Wallet, Contract, verifyMessage } from "ethers";
 import grindRunAbi from "./abi/GrindRun.js";
+import erc20Abi from "./abi/ERC20.js";
 import dotenv from "dotenv";
 import cron from "node-cron";
+import {ethers} from "ethers";
 
 dotenv.config();
 
@@ -82,7 +84,7 @@ app.post("/update/skin", (req, res) => {
 });
 
 app.post("/grinded/coins", (req, res) => {
-  console.log("A player grinded coins: ", req.body);
+  console.log("Player grinded coins: ", req.body);
   const walletAddress = req.body.walletAddress;
   const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
   const playerData = JSON.parse(fs.readFileSync(filePath));
@@ -92,6 +94,38 @@ app.post("/grinded/coins", (req, res) => {
   if (numCoins > 0) contract.addCoinsToScore(walletAddress, numCoins);
   console.log(`Added coins to ${walletAddress}'.`);
 });
+
+app.post("/score/info", async (req, res) => {
+  console.log("Player requests score: ", req.body);
+  const walletAddress = req.body.walletAddress;
+    try {
+        const [tokenAddress, totalCoins, playerScore] = await Promise.all([
+            contract.grindToken(),
+            contract.totalCoins(),
+            contract.scores(walletAddress),
+        ]);
+
+        const token = new Contract(tokenAddress, erc20Abi, provider); // Use connected provider
+        const treasuryBalanceRaw = await token.balanceOf(contractAddress);
+        const treasuryBalance = Number(ethers.formatUnits(treasuryBalanceRaw, 18));
+
+        const coins = Number(totalCoins);
+        const yours = Number(playerScore);
+        const percent = coins > 0 ? (yours / coins) * 100 : 0;
+        const grindReward = treasuryBalance * percent / 100;
+
+        res.json({
+            treasuryBalance,
+            totalCoins: coins,
+            playerCoins: yours,
+            percent,
+            grindReward
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch score data" });
+    }
+})
 
 contract.on("itemPurchase", (buyer, itemType, item) => {
   console.log(`${buyer} bought ${itemType}: ${item}`);

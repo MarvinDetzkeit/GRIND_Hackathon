@@ -158,7 +158,7 @@ export function gameLoop(timestamp) {
   } else {
     menu.style.display = "none";
   }
-  
+  const frameEnd = performance.now();
 
   requestAnimationFrame(gameLoop);
 }
