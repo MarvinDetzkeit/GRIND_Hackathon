@@ -155,7 +155,9 @@ function createSkinCard(skin) {
       try {
         await approveTransaction(ethers.utils.parseUnits("7777", 18));
         await buySkin(skin.name);
-        const newPlayerData = await sendToBackend({ message: "Getting latest data...", walletAddress: getWalletAddress() }, "/request/data");
+        sendToBackend({ itemType: "skin", item: skin.name, walletAddress: getWalletAddress() }, "/bought/item");
+        let newPlayerData = getData();
+        if (!newPlayerData.skins.includes(skin.name)) newPlayerData.skins.push(skin.name);
         setData(newPlayerData);
         refreshSkinsMenu();
       } catch (err) {
@@ -224,7 +226,9 @@ function createBuyButton(perkName) {
       buyBtn.textContent = "Bought!";
       buyBtn.style.color = "#aaa";
 
-      const newPlayerData = await sendToBackend({ message: "Getting latest data...", walletAddress: getWalletAddress() }, "/request/data");
+      sendToBackend({ itemType: "perk", item: perkName, walletAddress: getWalletAddress() }, "/bought/item");
+      let newPlayerData = getData();
+      if (!newPlayerData.perks.includes(perkName)) newPlayerData.perks.push(perkName);
       setData(newPlayerData);
       refreshPerksMenu();
     } catch (err) {

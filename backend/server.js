@@ -186,10 +186,12 @@ app.post("/score/info", async (req, res) => {
     }
 });
 
-contract.on("itemPurchase", (buyer, itemType, item) => {
-  console.log(`${buyer} bought ${itemType}: ${item}`);
-
-  const filePath = path.join(PLAYER_DATA_DIR, `${buyer}.json`);
+app.post("/bought/item", (req, res) => {
+  console.log("Player bought item: ", req.body);
+  const walletAddress = req.body.walletAddress;
+  const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  const itemType = req.body.itemType;
+  const item = req.body.item;
   if (!fs.existsSync(filePath)) {
     const newPlayer = {
       walletAddress,
@@ -202,19 +204,14 @@ contract.on("itemPurchase", (buyer, itemType, item) => {
     };
     fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
   }
-
   const playerData = JSON.parse(fs.readFileSync(filePath));
-
-  if (itemType === "perk" && !playerData.perks.includes(item)) {
-    playerData.perks.push(item);
-  }
-
   if (itemType === "skin" && !playerData.skins.includes(item)) {
     playerData.skins.push(item);
   }
-
+  if (itemType === "perk" && !playerData.perks.includes(item)) {
+    playerData.perks.push(item);
+  }
   fs.writeFileSync(filePath, JSON.stringify(playerData, null, 2));
-  console.log(`Updated ${buyer}'s data`);
 });
 
 
