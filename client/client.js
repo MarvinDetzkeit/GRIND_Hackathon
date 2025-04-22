@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://localhost:3001"//"https://grind-hackathon.onrender.com"
+const BACKEND_URL = "https://grind-hackathon.onrender.com"
 
 export async function sendToBackend(payload, route) {
   const res = await fetch(BACKEND_URL + route, {
