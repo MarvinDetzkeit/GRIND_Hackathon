@@ -85,6 +85,18 @@ app.post("/request/data", (req, res) => {
   console.log("Received data request:", req.body);
   const walletAddress = req.body.walletAddress;
   const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  if (!fs.existsSync(filePath)) {
+    const newPlayer = {
+      walletAddress,
+      nickName: walletAddress,
+      coins: 0,
+      perks: [],
+      skins: [],
+      selectedSkin: "",
+      createdAt: Date.now()
+    };
+    fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
+  }
   const playerData = JSON.parse(fs.readFileSync(filePath));
   console.log(playerData);
   res.json(playerData);
@@ -94,6 +106,18 @@ app.post("/update/skin", (req, res) => {
   console.log("Update Skin request: ", req.body);
   const walletAddress = req.body.walletAddress;
   const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  if (!fs.existsSync(filePath)) {
+    const newPlayer = {
+      walletAddress,
+      nickName: walletAddress,
+      coins: 0,
+      perks: [],
+      skins: [],
+      selectedSkin: "",
+      createdAt: Date.now()
+    };
+    fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
+  }
   const playerData = JSON.parse(fs.readFileSync(filePath));
   playerData.selectedSkin = req.body.selectedSkin;
   fs.writeFileSync(filePath, JSON.stringify(playerData, null, 2));
@@ -104,6 +128,18 @@ app.post("/grinded/coins", (req, res) => {
   console.log("Player grinded coins: ", req.body);
   const walletAddress = req.body.walletAddress;
   const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  if (!fs.existsSync(filePath)) {
+    const newPlayer = {
+      walletAddress,
+      nickName: walletAddress,
+      coins: 0,
+      perks: [],
+      skins: [],
+      selectedSkin: "",
+      createdAt: Date.now()
+    };
+    fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
+  }
   const playerData = JSON.parse(fs.readFileSync(filePath));
   const numCoins = req.body.newCoins;
   playerData.coins += numCoins;
@@ -149,8 +185,16 @@ contract.on("itemPurchase", (buyer, itemType, item) => {
 
   const filePath = path.join(PLAYER_DATA_DIR, `${buyer}.json`);
   if (!fs.existsSync(filePath)) {
-    console.warn("Buyer not found:", buyer);
-    return;
+    const newPlayer = {
+      walletAddress,
+      nickName: walletAddress,
+      coins: 0,
+      perks: [],
+      skins: [],
+      selectedSkin: "",
+      createdAt: Date.now()
+    };
+    fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
   }
 
   const playerData = JSON.parse(fs.readFileSync(filePath));
