@@ -7,7 +7,7 @@ heart.src = `game/assets/heart.png`;
 heart.onload  = () => {};
 
 const helpText = new Image();
-helpText.src = `game/assets/heart.png`; //200 x 100
+helpText.src = `game/assets/helpText.png`; //200 x 100
 helpText.onload = () => {};
 
 export function showHelpText() {

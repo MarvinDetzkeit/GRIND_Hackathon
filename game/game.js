@@ -69,6 +69,8 @@ export function startGame() {
   GameContext.gameIsRunning = true;
   stopMenuMusic();
   startGameMusic();
+  notJumped = true;
+  notSlided = true;
 }
 
 function update() {
