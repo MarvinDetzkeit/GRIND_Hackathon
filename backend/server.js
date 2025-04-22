@@ -125,7 +125,7 @@ app.post("/score/info", async (req, res) => {
         console.error(err);
         res.status(500).json({ error: "Failed to fetch score data" });
     }
-})
+});
 
 contract.on("itemPurchase", (buyer, itemType, item) => {
   console.log(`${buyer} bought ${itemType}: ${item}`);
