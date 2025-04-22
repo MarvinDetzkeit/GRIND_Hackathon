@@ -18,15 +18,16 @@ const rpcUrl = process.env.RPC_URL;
 const provider = new WebSocketProvider(process.env.WSS_URL);
 
 // Restart process if WebSocket dies
-provider._websocket.on("close", (code) => {
-  console.error("WebSocket connection closed. Code:", code);
-  process.exit(1); // Render auto-restarts the process
+provider.on("error", (err) => {
+  console.error("WebSocketProvider error:", err);
+  process.exit(1);
 });
 
-provider._websocket.on("error", (err) => {
-  console.error("WebSocket error:", err);
-  process.exit(1); // Ensure broken connection doesn't hang
+provider.on("close", (code) => {
+  console.error("WebSocketProvider closed. Code:", code);
+  process.exit(1);
 });
+
 
 const wallet = new Wallet(privateKey, provider);
 const contract = new Contract(contractAddress, grindRunAbi, wallet);
