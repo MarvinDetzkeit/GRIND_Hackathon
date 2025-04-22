@@ -6,6 +6,14 @@ const heart = new Image();
 heart.src = `game/assets/heart.png`;
 heart.onload  = () => {};
 
+const helpText = new Image();
+helpText.src = `game/assets/heart.png`; //200 x 100
+helpText.onload = () => {};
+
+export function showHelpText() {
+    GameContext.ctx.drawImage(helpText, (GameContext.canvas.width - 400) / 2, (GameContext.canvas.height / 4) - 100, 400, 200)
+}
+
 const coinCount = document.createElement("div");
 coinCount.style.position = "absolute";
 coinCount.style.top = "10px";

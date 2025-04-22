@@ -4,7 +4,7 @@ import { Camera } from './player.js';
 import { Level } from './level.js';
 import { drawBackground, scrollClouds, drawClouds } from './background.js';
 import { animateCoin } from './level.js';
-import { clearOverlay, showOverlay, showMenuOverlay, clearMenuOverlay } from '../menu/overlay.js';
+import { clearOverlay, showOverlay, showMenuOverlay, clearMenuOverlay, showHelpText } from '../menu/overlay.js';
 import { menu } from '../menu/mainMenu.js';
 import { updateLogo, renderLogo, resetLogo } from '../menu/logo.js';
 import { getData, addPoints } from "../client/data.js";
@@ -83,15 +83,20 @@ function update() {
   level.setBack(currentPart, player, camera);
 }
 
+let notJumped = true;
+let notSlided = true;
+
 function handleInputs() {
   if (!GameContext.gameIsRunning) {
     return;
   }
   if (Input.space) {
+    notJumped = false;
     player.jump();
     Input.space = false;
   }
   if (Input.shift) {
+    notSlided = false;
     player.startStopSliding(level);
     Input.shift = false;
   }
@@ -111,9 +116,9 @@ const Input = {
 
 // Listen for keydown and keyup events
 window.addEventListener("keydown", (e) => {
-  if (e.key === "Shift") {
+  if (e.key === "Shift" || e.key === "ArrowDown") {
     Input.shift = true;
-  } else if (e.key === " ") {
+  } else if (e.key === " " || e.key === "ArrowUp") {
     Input.space = true;
   }
 });
@@ -145,6 +150,7 @@ export function gameLoop(timestamp) {
   render();
   if (GameContext.gameIsRunning) {
     showOverlay(player);
+    if (notJumped || notSlided) showHelpText();
   }
   if (!GameContext.gameIsRunning) {
     menu.style.display = "block";
