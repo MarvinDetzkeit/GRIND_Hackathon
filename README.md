@@ -1,4 +1,4 @@
-![Banner](Banner.png)
+![Banner](banner.png)
 
 # Grind Run
 
