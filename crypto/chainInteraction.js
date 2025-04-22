@@ -3,7 +3,7 @@ import grindRunAbi from "./abi/GrindRun.js";
 import erc20Abi from "./abi/ERC20.js";
 import { getSigner } from "./wallet.js";
 
-const contractAddress = "0x55e17cE959444d737a2Fa32A04a6E72DF7BEf0Ae";
+export const contractAddress = "0x30c032Ebe7CC83e65FCB6F9f06F6a9EC4390B234";
 const GRIND_TOKEN_ADDRESS = "0x53B0f690E836E248D074360029a0D8dA4982D2Da";
 
 export async function approveTransaction(amount) {

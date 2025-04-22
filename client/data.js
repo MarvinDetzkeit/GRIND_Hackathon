@@ -1,4 +1,12 @@
-let data;
+let data = {
+    walletAddress: "",
+    nickName: "",
+    coins: 0,
+    perks: [],
+    skins: [],
+    selectedSkin: "",
+    createdAt: 0
+  };
 
 export function setData(newData) {
     data = newData;
@@ -32,4 +40,8 @@ export function addSkin(newSkin) {
 
 export function getData() {
     return data;
+}
+
+export function setSelectedSkin(skin) {
+    data.selectedSkin = skin;
 }

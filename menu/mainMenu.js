@@ -1,8 +1,23 @@
 import { startGame } from "../game/game.js";
-import { getData, setData } from "../client/data.js";
+import { getData, setData, setSelectedSkin } from "../client/data.js";
 import { sendToBackend } from "../client/client.js";
 import { approveTransaction, buyPerk, buySkin } from "../crypto/chainInteraction.js";
 import { getWalletAddress } from "../crypto/wallet.js";
+import { GameContext } from "../game/lib.js";
+import { standingH , standingB , standingF} from "../game/player.js";
+import { loggedIn } from "../main.js";
+import { startMenuMusic } from "../game/sound.js";
+
+
+const Hamster = standingH[0];
+const Bear = standingB[0];
+const Frog = standingF[0];
+
+const skins = [
+  { name: "Hamster", image: Hamster },
+  { name: "Bear", image: Bear },
+  { name: "Frog", image: Frog }
+];
 
 export const menu = document.createElement("div");
 menu.style.position = "absolute";
@@ -29,16 +44,31 @@ startBtn.onclick = () => {
 
 const skinsBtn = document.createElement("button");
 skinsBtn.textContent = "Skins";
-skinsBtn.onclick = () => switchMenu(skinsMenu);
+skinsBtn.onclick = async () => {
 
-const perksBtn = document.createElement("button");
-perksBtn.textContent = "Perks";
-perksBtn.onclick = async () => {
-  const newPlayerData = await sendToBackend(
+  let newPlayerData = getData();
+  if (newPlayerData.skins.length < 3) {
+    newPlayerData = await sendToBackend(
     { message: "Getting latest data...", walletAddress: getWalletAddress() },
     "/request/data"
   );
   setData(newPlayerData);
+}
+  refreshSkinsMenu();
+  switchMenu(skinsMenu);
+}
+
+const perksBtn = document.createElement("button");
+perksBtn.textContent = "Perks";
+perksBtn.onclick = async () => {
+  let newPlayerData = getData();
+  if (newPlayerData.perks.length < 4) {
+  newPlayerData = await sendToBackend(
+    { message: "Getting latest data...", walletAddress: getWalletAddress() },
+    "/request/data"
+  );
+  setData(newPlayerData);
+  }
   refreshPerksMenu();
   switchMenu(perksMenu);
 };
@@ -56,10 +86,101 @@ leaderboardBtn.onclick = () => switchMenu(leaderboardMenu);
 
 // ========== Skins Menu ==========
 const skinsMenu = document.createElement("div");
+skinsMenu.style.display = "flex";
+skinsMenu.style.flexDirection = "column";
+skinsMenu.style.alignItems = "center";
+
+const skinsGrid = document.createElement("div");
+skinsGrid.style.display = "flex";
+skinsGrid.style.gap = "30px";
+skinsGrid.style.marginBottom = "20px";
+
+function createSkinCard(skin) {
+  const card = document.createElement("div");
+  card.style.background = "#222";
+  card.style.padding = "15px";
+  card.style.borderRadius = "10px";
+  card.style.textAlign = "center";
+
+  const img = document.createElement("canvas");
+  img.width = GameContext.tileSize;
+  img.height = GameContext.tileSize * 1.5;
+  const ctx = img.getContext("2d");
+  ctx.drawImage(
+  skin.image,
+  0, 0, 32, 48,
+  0, 0,
+  GameContext.tileSize,
+  GameContext.tileSize * 1.5
+  );
+  card.appendChild(img);
+
+  const label = document.createElement("div");
+  label.textContent = skin.name;
+  label.style.margin = "10px 0";
+  label.style.fontWeight = "bold";
+  card.appendChild(label);
+
+  const btn = document.createElement("button");
+  btn.style.padding = "6px 12px";
+  btn.style.fontSize = "16px";
+  card.appendChild(btn);
+
+  const playerData = getData();
+
+  const isOwned = playerData.skins.includes(skin.name);
+  const isSelected = playerData.selectedSkin === skin.name;
+
+  if (isOwned) {
+    btn.textContent = isSelected ? "Selected" : "Select";
+    if (isSelected) btn.style.color = "#aaa";
+
+    btn.onclick = async () => {
+      if (isSelected) return;
+      btn.textContent = "Selecting...";
+      sendToBackend({ selectedSkin: skin.name, walletAddress: getWalletAddress() }, "/update/skin");
+      setSelectedSkin(skin.name);
+      refreshSkinsMenu();
+    };
+  } else {
+    btn.textContent = "7777 $GRIND";
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.textContent = "Buying...";
+      try {
+        await approveTransaction(ethers.utils.parseUnits("7777", 18));
+        await buySkin(skin.name);
+        const newPlayerData = await sendToBackend({ message: "Getting latest data...", walletAddress: getWalletAddress() }, "/request/data");
+        setData(newPlayerData);
+        refreshSkinsMenu();
+      } catch (err) {
+        console.error(err);
+        alert("Purchase failed.");
+        btn.disabled = false;
+        btn.textContent = "7777 $GRIND";
+      }
+    };
+  }
+
+  return card;
+}
+
+function refreshSkinsMenu() {
+  skinsGrid.innerHTML = "";
+  skins.forEach(skin => {
+    skinsGrid.appendChild(createSkinCard(skin));
+  });
+}
+
+refreshSkinsMenu();
+skinsMenu.appendChild(skinsGrid);
+
 const backFromSkins = document.createElement("button");
 backFromSkins.textContent = "Back";
 backFromSkins.onclick = () => switchMenu(mainMenu);
+backFromSkins.style.marginTop = "10px";
 skinsMenu.appendChild(backFromSkins);
+
 
 // ========== Perks Menu ==========
 const perksMenu = document.createElement("div");
@@ -92,7 +213,7 @@ function createBuyButton(perkName) {
       buyBtn.disabled = true;
       buyBtn.textContent = "Buying...";
 
-      await approveTransaction(777);
+      await approveTransaction(ethers.utils.parseUnits("777", 18));
       await buyPerk(perkName);
 
       buyBtn.textContent = "Bought!";
@@ -160,6 +281,25 @@ backFromLeaderboard.textContent = "Back";
 backFromLeaderboard.onclick = () => switchMenu(mainMenu);
 leaderboardMenu.appendChild(backFromLeaderboard);
 
+// ========== Start Game Menu ==========
+const startGameMenu = document.createElement("div");
+
+const startGameBtn = document.createElement("button");
+startGameBtn.textContent = "Enter Game";
+startGameBtn.onclick = () => {
+  if (loggedIn) {
+  switchMenu(mainMenu);
+  startGameMenu.remove();
+  startMenuMusic();
+  }
+};
+
+startGameBtn.style.fontSize = "24px";
+startGameBtn.style.padding = "15px 30px";
+startGameBtn.style.margin = "20px";
+
+startGameMenu.appendChild(startGameBtn);
+
 // ========== Menu Switching ==========
 function switchMenu(target) {
   [mainMenu, skinsMenu, perksMenu, leaderboardMenu].forEach(menu => {
@@ -168,9 +308,10 @@ function switchMenu(target) {
   target.style.display = "block";
 }
 
+menu.appendChild(startGameMenu);
 menu.appendChild(mainMenu);
 menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
 menu.appendChild(leaderboardMenu);
 
-switchMenu(mainMenu); // Default screen
+switchMenu(startGameMenu); // Default screen

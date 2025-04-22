@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/marvin/Desktop/GRIND_Hackathon/smart_contracts/contracts/GrindRun.sol": {
-      "lastModificationDate": 1745159332331,
-      "contentHash": "82c052288b6590eb677085ab215a74d1",
+      "lastModificationDate": 1745309569885,
+      "contentHash": "928f06d3c0ec34c6cbb8221c466c48db",
       "sourceName": "contracts/GrindRun.sol",
       "solcConfig": {
         "version": "0.8.28",

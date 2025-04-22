@@ -9,7 +9,7 @@ const jumpSpeed = -20;
 const slideTime = 30;
 
 //Hamster Frames
-const standingH = [];
+export const standingH = [];
 for (let i = 1; i <= 2; i++) {
     standingH[i-1] = new Image();
     standingH[i-1].src = `game/assets/stand/HamsterStanding${i}.png`;
@@ -28,7 +28,7 @@ for (let i = 1; i <= 2; i++) {
 }
 
 //Bear Frames
-const standingB = [];
+export const standingB = [];
 for (let i = 1; i <= 2; i++) {
     standingB[i-1] = new Image();
     standingB[i-1].src = `game/assets/stand/BearStanding${i}.png`;
@@ -47,7 +47,7 @@ for (let i = 1; i <= 2; i++) {
 }
 
 //Frog Frames
-const standingF = [];
+export const standingF = [];
 for (let i = 1; i <= 2; i++) {
     standingF[i-1] = new Image();
     standingF[i-1].src = `game/assets/stand/FrogStandingMask${i}.png`;
@@ -89,7 +89,7 @@ export class Player {
         this.hasDoubleJump = false;
         this.canDoubleJump = false;
 
-        this.currentChar = "H";
+        this.currentChar = "Hamster";
     }
 
     render(camera) {
@@ -97,7 +97,7 @@ export class Player {
         let positionX = this.x  + camera.renderOffsetX - camera.x;
         let positionY = this.y  + camera.renderOffsetY - camera.y + 3;
 
-        if (this.currentChar === "H") { 
+        if (this.currentChar === "Hamster") { 
 
         if (!GameContext.gameIsRunning) {
             GameContext.ctx.drawImage(standingH[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
@@ -111,7 +111,7 @@ export class Player {
         }
     }
 
-    if (this.currentChar === "B") { 
+    if (this.currentChar === "Bear") { 
 
         if (!GameContext.gameIsRunning) {
             GameContext.ctx.drawImage(standingB[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
@@ -125,7 +125,7 @@ export class Player {
         }
     }
 
-    if (this.currentChar === "F") { 
+    if (this.currentChar === "Frog") { 
 
         if (!GameContext.gameIsRunning) {
             GameContext.ctx.drawImage(standingF[Math.floor(this.standFrames)], positionX, positionY, GameContext.tileSize, GameContext.tileSize * 1.5);
@@ -148,6 +148,10 @@ export class Player {
     updateStandFrames() {
         this.standFrames += (1 / 96);
         if (this.standFrames >= 2) this.standFrames = 0;
+    }
+
+    setSkin(skin) {
+        this.currentChar = skin;
     }
 
     gravity() {

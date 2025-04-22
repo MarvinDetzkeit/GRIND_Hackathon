@@ -8,6 +8,9 @@ import { clearOverlay, showOverlay } from '../menu/overlay.js';
 import { menu } from '../menu/mainMenu.js';
 import { updateLogo, renderLogo, resetLogo } from '../menu/logo.js';
 import { getData, addPoints } from "../client/data.js";
+import { sendToBackend } from '../client/client.js';
+import { getWalletAddress } from '../crypto/wallet.js';
+import { startMenuMusic, stopMenuMusic, stopGameMusic, startGameMusic } from './sound.js';
 
 // Set screen size
 GameContext.canvas.width = window.innerWidth;
@@ -19,7 +22,8 @@ let level;
 
 function initGame() {
   player = new Player(20 * GameContext.tileSize, 223);
-  console.log(getData());
+  const playerData = getData();
+  player.setSkin(playerData.selectedSkin);
   
   camera = new Camera(player.x, 4 * GameContext.tileSize);
   level = new Level();
@@ -30,13 +34,19 @@ function initGame() {
 
 export function endGame() {
   clearOverlay();
+  if (player.coins > 0) sendToBackend({walletAddress: getWalletAddress(), newCoins: player.coins}, "/grinded/coins");
   initGame();
   GameContext.gameIsRunning = false;
   resetLogo();
 }
 
 export function startGame() {
+  if (player.currentChar === "") {
+    alert("You need to select a skin.");
+    return;
+  }
   const playerData = getData();
+  player.setSkin(playerData.selectedSkin);
   if (playerData.perks.includes("Double Jump")) {
     player.hasDoubleJump = true;
   }
@@ -55,6 +65,8 @@ export function startGame() {
   Input.space = false;
   Input.shift = false;
   GameContext.gameIsRunning = true;
+  stopMenuMusic();
+  startGameMusic();
 }
 
 function update() {
@@ -121,6 +133,8 @@ export function gameLoop(timestamp) {
     scrollClouds();
     if (!GameContext.gameIsRunning) {
       endGame();
+      stopGameMusic();
+      startMenuMusic();
     }
   }
 
@@ -134,6 +148,7 @@ export function gameLoop(timestamp) {
     menu.style.display = "block";
     renderLogo();
     if (delta >= timestep) {
+      player.setSkin(getData().selectedSkin);
       updateLogo();
       player.updateStandFrames();
     }

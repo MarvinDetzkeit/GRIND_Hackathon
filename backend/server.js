@@ -2,14 +2,20 @@ import express from "express";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
-import * as ethers from "ethers";
-import grindRunAbi from "../crypto/abi/GrindRun.js";
+import { JsonRpcProvider, Wallet, Contract } from "ethers";
+import grindRunAbi from "./abi/GrindRun.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 
-const contractAddress = "0x55e17cE959444d737a2Fa32A04a6E72DF7BEf0Ae";
+const contractAddress = "0x30c032Ebe7CC83e65FCB6F9f06F6a9EC4390B234";
+const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
+const rpcUrl = process.env.RPC_URL;
 
-const provider = new ethers.WebSocketProvider("wss://api.testnet.abs.xyz/ws");
-const contract = new ethers.Contract(contractAddress, grindRunAbi, provider);
+const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+const wallet = new ethers.Wallet(privateKey, provider);
+
+const contract = new ethers.Contract(contractAddress, grindRunAbi, wallet);
 
 const PLAYER_DATA_DIR = "./playerData";
 if (!fs.existsSync(PLAYER_DATA_DIR)) fs.mkdirSync(PLAYER_DATA_DIR);
@@ -50,6 +56,7 @@ app.post("/auth/login", (req, res) => {
       coins: 0,
       perks: [],
       skins: [],
+      selectedSkin: "",
       createdAt: Date.now()
     };
     fs.writeFileSync(filePath, JSON.stringify(newPlayer, null, 2));
@@ -68,8 +75,26 @@ app.post("/request/data", (req, res) => {
   res.json(playerData);
 });
 
-app.post("/update/info", (req, res) => {
+app.post("/update/skin", (req, res) => {
+  console.log("Update Skin request: ", req.body);
+  const walletAddress = req.body.walletAddress;
+  const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  const playerData = JSON.parse(fs.readFileSync(filePath));
+  playerData.selectedSkin = req.body.selectedSkin;
+  fs.writeFileSync(filePath, JSON.stringify(playerData, null, 2));
+  console.log(`Changed ${walletAddress}'s skin.`)
+});
 
+app.post("/grinded/coins", (req, res) => {
+  console.log("A player grinded coins: ", req.body);
+  const walletAddress = req.body.walletAddress;
+  const filePath = path.join(PLAYER_DATA_DIR, `${walletAddress}.json`);
+  const playerData = JSON.parse(fs.readFileSync(filePath));
+  const numCoins = req.body.newCoins;
+  playerData.coins += numCoins;
+  fs.writeFileSync(filePath, JSON.stringify(playerData, null, 2));
+  if (numCoins > 0) contract.addCoinsToScore(walletAddress, numCoins);
+  console.log(`Added coins to ${walletAddress}'.`);
 });
 
 contract.on("itemPurchase", (buyer, itemType, item) => {

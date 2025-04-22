@@ -25,9 +25,9 @@ for (let i = 1; i <= 2; i++) {
 }
 
 const flyingEnemyFrames = [];
-for (let i = 1; i <= 6; i++) {
+for (let i = 1; i <= 4; i++) {
     flyingEnemyFrames[i-1] = new Image();
-    flyingEnemyFrames[i-1].src = `game/assets/flyingenemy/flyingenemy${i}.png`;
+    flyingEnemyFrames[i-1].src = `game/assets/flyingenemy/flying${i}.png`;
     flyingEnemyFrames[i-1].onload = () => {};
 }
 
@@ -202,7 +202,7 @@ export class Obstacle extends LevelObject {
 
     refreshAnimation() {
         this.fFrames += (1 / 8);
-        if (this.fFrames >= 6) {
+        if (this.fFrames >= 4) {
             this.fFrames = 0;
         }
         this.cFrames += (1 / 32);
@@ -325,7 +325,7 @@ export class Level {
         // Load new level parts into slots 3–10
         for (let partIndex = 3; partIndex <= 10; partIndex++) {
             const randomPartId = Math.floor(Math.random() * (levelParts.length - 3)) + 3;
-            this.loadPart(0, partIndex);
+            this.loadPart(randomPartId, partIndex);
         }
     }
     
@@ -347,7 +347,7 @@ export class Level {
     generateSeed(count) {
         let n = levelParts.length;
         const arr = Array.from({ length: count + 4 }, () =>
-          0//Math.floor(Math.random() * (n-3)) + 3
+          Math.floor(Math.random() * (n-3)) + 3
         );
         arr[0] = 0;
         arr[1] = 0;

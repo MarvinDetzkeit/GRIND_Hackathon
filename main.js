@@ -1,8 +1,9 @@
 import { connectWallet, getWalletAddress, getSigner } from './crypto/wallet.js';
 import { gameLoop } from './game/game.js';
 import { sendToBackend } from './client/client.js';
-import { setData, getData } from './client/data.js';
-import { refreshPerksMenu } from './menu/mainMenu.js';
+import { setData } from './client/data.js';
+
+export let loggedIn = false;
 
 async function init() {
   const connected = await connectWallet();
@@ -20,14 +21,14 @@ async function init() {
     { walletAddress, signature, message },
     "/auth/login"
   );
-  setData(playerData);
+
+  setData(playerData); // safe to use getData() from here on
   console.log(playerData);
-  refreshPerksMenu();
 
-  if (!playerData.error) {
-  requestAnimationFrame(gameLoop);
+  if (playerData.createdAt > 0) {
+    loggedIn = true;
+    requestAnimationFrame(gameLoop);
   }
-
 }
 
 init();

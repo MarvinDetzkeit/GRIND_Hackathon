@@ -5,9 +5,9 @@
       "contracts/GrindRun.sol:GrindRun": {
         "src": "contracts/GrindRun.sol:18",
         "version": {
-          "withMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da",
-          "withoutMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da",
-          "linkedWithoutMetadata": "4230cdbddd328816e69134673ab79d18bbf6b426fbeee5d089e36a8d55e2d0da"
+          "withMetadata": "25f22e5008c5c0a11a20c7dc377e4b13bc9344fe4b963b4ee1a80d7f80b50e62",
+          "withoutMetadata": "25f22e5008c5c0a11a20c7dc377e4b13bc9344fe4b963b4ee1a80d7f80b50e62",
+          "linkedWithoutMetadata": "25f22e5008c5c0a11a20c7dc377e4b13bc9344fe4b963b4ee1a80d7f80b50e62"
         },
         "inherit": [],
         "libraries": [],
@@ -15,14 +15,15 @@
           "(address)",
           "buyPerk(string)",
           "buySkin(string)",
-          "rewardTopPlayers(address[])"
+          "addCoinsToScore(address,uint256)",
+          "rewardPlayers()"
         ],
         "linkReferences": [],
         "errors": [
           {
             "kind": "constructor",
             "contract": "GrindRun",
-            "src": "contracts/GrindRun.sol:23"
+            "src": "contracts/GrindRun.sol:28"
           }
         ],
         "layout": {
@@ -44,6 +45,24 @@
               "label": "grindToken",
               "type": "t_contract(IERC20)52",
               "src": "contracts/GrindRun.sol:21"
+            },
+            {
+              "contract": "GrindRun",
+              "label": "scores",
+              "type": "t_mapping(t_address,t_uint256)",
+              "src": "contracts/GrindRun.sol:22"
+            },
+            {
+              "contract": "GrindRun",
+              "label": "players",
+              "type": "t_array(t_address)dyn_storage",
+              "src": "contracts/GrindRun.sol:23"
+            },
+            {
+              "contract": "GrindRun",
+              "label": "totalCoins",
+              "type": "t_uint256",
+              "src": "contracts/GrindRun.sol:24"
             }
           ],
           "types": {
@@ -52,6 +71,15 @@
             },
             "t_contract(IERC20)52": {
               "label": "contract IERC20"
+            },
+            "t_mapping(t_address,t_uint256)": {
+              "label": "mapping(address => uint256)"
+            },
+            "t_uint256": {
+              "label": "uint256"
+            },
+            "t_array(t_address)dyn_storage": {
+              "label": "address[]"
             }
           },
           "layoutVersion": "1.2",
