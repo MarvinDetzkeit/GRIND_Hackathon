@@ -12,6 +12,8 @@ Players have to buy in to play the game by buying at least one character to play
 
 All In-Game-Purchases are made in $GRIND and the money goes to a treasury. At the end of a season, every player gets awarded a portion of the whole treasury, proportional to the number of coins the player collected during that season, divided by the total number of coins collected by all players in that season.
 
+The more you GRIND, the more you WIN!
+
 ## Incorporation of the Brands
 The game features three characters:
 
@@ -35,10 +37,10 @@ The game features three characters:
 
 ### Wallet
 We tested the game with the Metamask wallet, so this is the one we recommend.
-But any EVM wallet should work
+But any EVM wallet should work.
 
 ### How to get Testnet Tokens
-DM @PhilipHazey on X to get our Testnet \$GRIND tokens
+DM @PhilipHazey on X to get our Testnet \$GRIND tokens.
 
 ### Link to the game
 [Grind Run](https://marvindetzkeit.github.io/GRIND_Hackathon)
