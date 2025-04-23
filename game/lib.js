@@ -79,7 +79,7 @@ export const levelParts = [
   `                    \n` +
   `   bb   bb   bb     \n` +
   `      coc   o u o   \n` +
-  `   o                `,
+  `                    `,
 
   `                    \n` +
   `  cc                \n` +
