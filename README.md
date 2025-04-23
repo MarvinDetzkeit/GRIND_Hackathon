@@ -19,13 +19,14 @@ The game features three characters:
 
 ![Grind Hamster](game/assets/stand/HamsterStanding1.png)
 
--
+---
 
 **Bearish Bear**
 
 ![Grind Hamster](game/assets/stand/BearStanding1.png)
 
--
+---
+
 **Plague of Frog**
 
 ![Grind Hamster](game/assets/stand/FrogStandingMask1.png)
