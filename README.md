@@ -2,7 +2,42 @@
 
 # Grind Run
 
-An endless runner on the Abstract Blockchain featuring the $GRIND Token.
+An endless runner on the Abstract (Testnet) Blockchain featuring the $GRIND Token.
 
 ## Gameplay
-Players collect 
+Players collect coins in endless levels while trying to dodge obstacles and stay on screen.
+
+## $GRIND Token integration
+Players have to buy in to play the game by buying at least one character to play as. Players also have the ability to purchase Perks to make runs last longer or get more coins during a run.
+
+All In-Game-Purchases are made in $GRIND and the money goes to a treasury. At the end of a season, every player gets awarded a portion of the whole treasury, proportional to the number of coins the player collected during that season, divided by the total number of coins collected by all players in that season.
+
+## Incorporation of the Brands
+The game features three characters:
+
+**The Grind Hamster**
+
+![Grind Hamster](game/assets/stand/HamsterStanding1.png)
+
+-
+
+**Bearish Bear**
+
+![Grind Hamster](game/assets/stand/BearStanding1.png)
+
+-
+**Plague of Frog**
+
+![Grind Hamster](game/assets/stand/FrogStandingMask1.png)
+
+## Before you play
+
+### Wallet
+We tested the game with the Metamask wallet, so this is the one we recommend.
+But any EVM wallet should work
+
+### How to get Testnet Tokens
+DM @PhilipHazey on X to get our Testnet \$GRIND tokens
+
+### Link to the game
+[Grind Run](https://marvindetzkeit.github.io/GRIND_Hackathon)
