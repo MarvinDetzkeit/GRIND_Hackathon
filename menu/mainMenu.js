@@ -383,16 +383,18 @@ controlsMenu.appendChild(backFromControls);
 
 // ========== Menu Switching ==========
 function switchMenu(target) {
-  [mainMenu, skinsMenu, perksMenu, scoreMenu].forEach(menu => {
+  [mainMenu, skinsMenu, perksMenu, scoreMenu, controlsMenu].forEach(menu => {
     menu.style.display = "none";
   });
   target.style.display = "block";
 }
+
 
 menu.appendChild(startGameMenu);
 menu.appendChild(mainMenu);
 menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
 menu.appendChild(scoreMenu);
+menu.appendChild(controlsMenu);
 
 switchMenu(startGameMenu); // Default screen
