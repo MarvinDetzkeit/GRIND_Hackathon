@@ -81,8 +81,13 @@ leaderboardBtn.onclick = async () => {
   await loadScoreMenu();
 };
 
+const controlsBtn = document.createElement("button");
+controlsBtn.textContent = "Controls";
+controlsBtn.onclick = () => switchMenu(controlsMenu);
+mainMenu.appendChild(controlsBtn);
 
-[ startBtn, skinsBtn, perksBtn, leaderboardBtn ].forEach(btn => {
+
+[ startBtn, skinsBtn, perksBtn, leaderboardBtn, controlsBtn ].forEach(btn => {
   btn.style.margin = "10px";
   btn.style.fontSize = "20px";
   btn.style.padding = "10px 20px";
@@ -348,6 +353,33 @@ startGameBtn.style.padding = "15px 30px";
 startGameBtn.style.margin = "20px";
 
 startGameMenu.appendChild(startGameBtn);
+
+// ========== Controls Menu ==========
+const controlsMenu = document.createElement("div");
+controlsMenu.style.color = "white";
+controlsMenu.style.fontFamily = "monospace";
+controlsMenu.style.padding = "20px";
+controlsMenu.style.maxWidth = "500px";
+controlsMenu.style.margin = "auto";
+controlsMenu.style.textAlign = "left";
+
+const controlsTitle = document.createElement("h2");
+controlsTitle.textContent = "Game Controls";
+controlsMenu.appendChild(controlsTitle);
+
+const controlsInfo = document.createElement("div");
+controlsInfo.innerHTML = `
+  <p><b>Jump:</b> Press SPACE or UP</p>
+  <p><b>Slide:</b> Press SHIFT or DOWN - Don't hold the button, you can't slide for long</p>
+`;
+controlsMenu.appendChild(controlsInfo);
+
+const backFromControls = document.createElement("button");
+backFromControls.textContent = "Back";
+backFromControls.onclick = () => switchMenu(mainMenu);
+backFromControls.style.marginTop = "20px";
+controlsMenu.appendChild(backFromControls);
+
 
 // ========== Menu Switching ==========
 function switchMenu(target) {

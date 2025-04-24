@@ -164,7 +164,7 @@ export class Player {
 
     startStopSliding(level) {
         //start sliding if player hasn't slided or stop sliding
-        if (this.slideFrames < -5 || (this.slideFrames > 0 && this.canGetUp(level))) {
+        if (this.slideFrames < -20 || (this.slideFrames > 0 && this.canGetUp(level))) {
             this.slideFrames *= -1;
         }
     }
