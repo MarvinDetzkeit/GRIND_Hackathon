@@ -11,36 +11,47 @@ import {ethers} from "ethers";
 
 dotenv.config();
 
+let provider, wallet, contract;
+function initProvider() {
+  provider = new WebSocketProvider(process.env.WSS_URL);
+  wallet = new Wallet(privateKey, provider);
+  contract = new Contract(contractAddress, grindRunAbi, wallet);
+
+  const rawWs = provider._provider?._websocket;
+  if (rawWs) {
+    rawWs.on("close", (code) => {
+      console.error("WebSocket closed with code:", code);
+      reconnectProvider();
+    });
+
+    rawWs.on("error", (err) => {
+      console.error("WebSocket error:", err);
+      reconnectProvider();
+    });
+  }
+
+  // Keep-alive ping
+  setInterval(() => {
+    provider.getBlockNumber().catch(err => {
+      console.error("WebSocket keep-alive failed:", err);
+      reconnectProvider();
+    });
+  }, 30000);
+}
+
+function reconnectProvider() {
+  console.log("Reconnecting to provider...");
+  initProvider(); // Re-initialize provider, wallet, and contract
+}
+
+
 const contractAddress = "0x30c032Ebe7CC83e65FCB6F9f06F6a9EC4390B234";
 const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
 const rpcUrl = process.env.RPC_URL;
 
-const provider = new WebSocketProvider(process.env.WSS_URL);
+dotenv.config();
+initProvider();
 
-const rawWs = provider._provider?._websocket;
-
-if (rawWs) {
-  rawWs.on("close", (code) => {
-    console.error("WebSocket closed with code:", code);
-    process.exit(1);
-  });
-
-  rawWs.on("error", (err) => {
-    console.error("WebSocket error:", err);
-    process.exit(1);
-  });
-}
-
-setInterval(() => {
-  provider.getBlockNumber().catch(err => {
-    console.error("WebSocket keep-alive failed:", err);
-    process.exit(1); // or reconnectProvider()
-  });
-}, 30000);
-
-
-const wallet = new Wallet(privateKey, provider);
-const contract = new Contract(contractAddress, grindRunAbi, wallet);
 
 const PLAYER_DATA_DIR = "./playerData";
 if (!fs.existsSync(PLAYER_DATA_DIR)) fs.mkdirSync(PLAYER_DATA_DIR);

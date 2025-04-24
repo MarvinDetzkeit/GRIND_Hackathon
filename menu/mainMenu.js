@@ -320,8 +320,8 @@ export async function loadScoreMenu() {
             <p>Total Treasury Balance: ${treasuryBalance} $GRIND</p>
             <p>Total Coins (all players): ${totalCoins}</p>
             <p>Your Coins: ${playerCoins}</p>
-            <p>Your Share: ${percent.toFixed(2)}%</p>
-            <p>Expected Reward: ${grindReward.toFixed(2)} $GRIND</p>
+            <p>Your Share of all Coins: ${percent.toFixed(2)}%</p>
+            <p>Expected Reward (Based on your current share of coins): ${grindReward.toFixed(2)} $GRIND</p>
         `;
     } catch (err) {
         info.textContent = "Failed to load score data.";
@@ -339,6 +339,7 @@ startGameBtn.onclick = () => {
   switchMenu(mainMenu);
   startGameMenu.remove();
   startMenuMusic();
+  if (getData().selectedSkin === "") alert("Buy a skin to play the game.");
   }
 };
 
