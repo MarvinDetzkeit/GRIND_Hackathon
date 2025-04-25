@@ -339,6 +339,26 @@ export async function loadScoreMenu() {
     }
 }
 
+// ========== Start Game Menu ==========
+const startGameMenu = document.createElement("div");
+
+const startGameBtn = document.createElement("button");
+startGameBtn.textContent = "Enter Game.";
+startGameBtn.onclick = () => {
+  if (loggedIn) {
+  switchMenu(mainMenu);
+  startGameMenu.remove();
+  startMenuMusic();
+  if (getData().selectedSkin === "") alert("Buy and select a skin to play the game.");
+  }
+};
+
+startGameBtn.style.fontSize = "24px";
+startGameBtn.style.padding = "15px 30px";
+startGameBtn.style.margin = "20px";
+
+startGameMenu.appendChild(startGameBtn);
+
 // ========== Controls Menu ==========
 const controlsMenu = document.createElement("div");
 controlsMenu.style.color = "white";
@@ -409,6 +429,7 @@ function switchMenu(target) {
 }
 
 
+menu.appendChild(startGameMenu);
 menu.appendChild(mainMenu);
 menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
@@ -416,7 +437,7 @@ menu.appendChild(scoreMenu);
 menu.appendChild(controlsMenu);
 menu.appendChild(helpMenu);
 
-switchMenu(mainMenu);
+switchMenu(startGameMenu);
 
 export function hideMenu() {
   menu.style.display = "none";
