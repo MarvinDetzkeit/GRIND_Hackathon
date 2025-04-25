@@ -78,7 +78,7 @@ export const levelParts = [
   `   c   c   c   c    \n` +
   `                    \n` +
   `   bb   bb   bb     \n` +
-  `      coc   o u o   \n` +
+  `      coc     u o   \n` +
   `                    `,
 
   `                    \n` +
@@ -105,7 +105,7 @@ export const levelParts = [
   `   c   c   c   c    \n` +
   `  coc coc coc coc   `,
 
-  ` o          ccc    o\n` +
+  `            ccc    o\n` +
   `             o      \n` +
   `     bbbbbbbbbbbbbbb\n` +
   `   bbb  o           \n` +
@@ -114,6 +114,6 @@ export const levelParts = [
   `    cccccccccccc    \n` +
   `    bbbbbbbbbbbb  c \n` +
   `                c   \n` +
-  `        o       c   \n` +
+  `                c   \n` +
   `  bbocc   o     o   `
 ];

@@ -375,7 +375,8 @@ controlsMenu.appendChild(controlsTitle);
 const controlsInfo = document.createElement("div");
 controlsInfo.innerHTML = `
   <p><b>Jump:</b> Press SPACE or ARROW-UP</p>
-  <p><b>Slide:</b> Press SHIFT or ARROW-DOWN - Don't hold the button! You stand up after half a second, or after pressing again.</p>
+  <p><b>Slide:</b> Press SHIFT or ARROW-DOWN - Don't hold the button! You stand up after half a second, or after pressing again. 
+  After standing up, you can't slide for as long, as you were sliding.</p>
 `;
 controlsMenu.appendChild(controlsInfo);
 
