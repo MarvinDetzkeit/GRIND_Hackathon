@@ -2,7 +2,6 @@ import { connectWallet, getWalletAddress, getSigner } from './crypto/wallet.js';
 import { gameLoop } from './game/game.js';
 import { sendToBackend } from './client/client.js';
 import { setData } from './client/data.js';
-import { menuStart } from "./menu/mainMenu.js";
 
 export let loggedIn = false;
 

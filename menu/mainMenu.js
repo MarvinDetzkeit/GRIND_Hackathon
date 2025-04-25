@@ -21,7 +21,7 @@ const skins = [
 
 export const menu = document.createElement("div");
 menu.style.position = "absolute";
-menu.style.top = "75%";
+menu.style.top = "70%";
 menu.style.left = "50%";
 menu.style.transform = "translate(-50%, -50%)";
 menu.style.background = "rgba(0, 0, 0, 0.8)";
@@ -420,7 +420,7 @@ helpMenu.appendChild(backFromHelp);
 
 // ========== Menu Switching ==========
 function switchMenu(target) {
-  [mainMenu, skinsMenu, perksMenu, scoreMenu, controlsMenu].forEach(menu => {
+  [mainMenu, skinsMenu, perksMenu, scoreMenu, controlsMenu, helpMenu].forEach(menu => {
     menu.style.display = "none";
   });
   target.style.display = "block";
@@ -436,7 +436,3 @@ menu.appendChild(controlsMenu);
 menu.appendChild(helpMenu);
 
 switchMenu(startGameMenu);
-
-export function menuStart() {
-  switchMenu(startGameMenu);
-}
