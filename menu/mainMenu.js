@@ -35,6 +35,13 @@ document.body.appendChild(menu);
 // ========== Main Menu ==========
 const mainMenu = document.createElement("div");
 
+const startBtn = document.createElement("button");
+startBtn.textContent = "Start Run";
+startBtn.onclick = () => {
+  startGame();
+  switchMenu(mainMenu);
+};
+
 const skinsBtn = document.createElement("button");
 skinsBtn.textContent = "Skins";
 skinsBtn.onclick = async () => {
@@ -85,7 +92,7 @@ helpBtn.onclick = () => switchMenu(helpMenu);
 mainMenu.appendChild(helpBtn);
 
 
-[ skinsBtn, perksBtn, leaderboardBtn, controlsBtn, helpBtn ].forEach(btn => {
+[ startBtn, skinsBtn, perksBtn, leaderboardBtn, controlsBtn, helpBtn ].forEach(btn => {
   btn.style.margin = "10px";
   btn.style.fontSize = "20px";
   btn.style.padding = "10px 20px";
