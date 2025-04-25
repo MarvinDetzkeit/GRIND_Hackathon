@@ -370,7 +370,7 @@ controlsMenu.appendChild(controlsTitle);
 const controlsInfo = document.createElement("div");
 controlsInfo.innerHTML = `
   <p><b>Jump:</b> Press SPACE or UP</p>
-  <p><b>Slide:</b> Press SHIFT or DOWN - Don't hold the button, you can't slide for long</p>
+  <p><b>Slide:</b> Press SHIFT or DOWN - Don't hold the button! You stand up after half a second, or after pressing again.</p>
 `;
 controlsMenu.appendChild(controlsInfo);
 
@@ -379,6 +379,8 @@ backFromControls.textContent = "Back";
 backFromControls.onclick = () => switchMenu(mainMenu);
 backFromControls.style.marginTop = "20px";
 controlsMenu.appendChild(backFromControls);
+
+// ========== Help Menu ==========
 
 
 // ========== Menu Switching ==========
@@ -397,4 +399,8 @@ menu.appendChild(perksMenu);
 menu.appendChild(scoreMenu);
 menu.appendChild(controlsMenu);
 
-switchMenu(startGameMenu); // Default screen
+//switchMenu(startGameMenu);
+
+function menuStart() {
+  switchMenu(startGameMenu);
+}
