@@ -343,13 +343,13 @@ export async function loadScoreMenu() {
 const startGameMenu = document.createElement("div");
 
 const startGameBtn = document.createElement("button");
-startGameBtn.textContent = "Enter Game";
+startGameBtn.textContent = "Press after Wallet is connected.";
 startGameBtn.onclick = () => {
   if (loggedIn) {
   switchMenu(mainMenu);
   startGameMenu.remove();
   startMenuMusic();
-  if (getData().selectedSkin === "") alert("Buy a skin to play the game.");
+  if (getData().selectedSkin === "") alert("Buy and select a skin to play the game.");
   }
 };
 
@@ -404,9 +404,10 @@ helpInfo.innerHTML = `
   <p><b>The Game feels hard?:</b> Buy perks from the perk shop to make your life easier and earn more coins.</p>
   <p><b>Where do the $GRIND tokens go?:</b> The tokens go into a treasury. At the end of a season, it gets distributed to all players.</p>
   <p><b>How does the reward distribution work?:</b> Every player gets a share of the treasury. The amount depends on how many coins
-  the player collected. For example, a player who collected 10% of all the coins collected by all players, gets 10% of the treasury.</p>
+  the player collected, relative to how many coins were collected by all players combined. 
+  For example, a player who collected 10% of all the coins collected by all players, gets 10% of the treasury.</p>
   <p><b>Who ensures fair distribution?:</b> A smart contract manages player's coins and distribution. 
-  It is impossible to access the treasury's tokens, the wallet that holds the tokens is the contract itself.</p>
+  It is impossible to access the treasury's tokens as the wallet that holds the tokens is the contract itself.</p>
   
 `;
 helpMenu.appendChild(helpInfo);
