@@ -86,8 +86,13 @@ controlsBtn.textContent = "Controls";
 controlsBtn.onclick = () => switchMenu(controlsMenu);
 mainMenu.appendChild(controlsBtn);
 
+const helpBtn = document.createElement("button");
+helpBtn.textContent = "Help";
+helpBtn.onclick = () => switchMenu(helpMenu);
+mainMenu.appendChild(helpBtn);
 
-[ startBtn, skinsBtn, perksBtn, leaderboardBtn, controlsBtn ].forEach(btn => {
+
+[ startBtn, skinsBtn, perksBtn, leaderboardBtn, controlsBtn, helpBtn ].forEach(btn => {
   btn.style.margin = "10px";
   btn.style.fontSize = "20px";
   btn.style.padding = "10px 20px";
@@ -381,6 +386,36 @@ backFromControls.style.marginTop = "20px";
 controlsMenu.appendChild(backFromControls);
 
 // ========== Help Menu ==========
+const helpMenu = document.createElement("div");
+helpMenu.style.color = "white";
+helpMenu.style.fontFamily = "monospace";
+helpMenu.style.padding = "20px";
+helpMenu.style.maxWidth = "500px";
+helpMenu.style.margin = "auto";
+helpMenu.style.textAlign = "left";
+
+const HelpTitle = document.createElement("h2");
+HelpTitle.textContent = "Game Controls";
+helpMenu.appendChild(HelpTitle);
+
+const helpInfo = document.createElement("div");
+helpInfo.innerHTML = `
+  <p><b>How to Play?:</b> Buy and select a skin from the skin shop, then you can start a run.</p>
+  <p><b>The Game feels hard?:</b> Buy perks from the perk shop to make your life easier and earn more coins.</p>
+  <p><b>Where do the $GRIND tokens go?:</b> The tokens go into a treasury. At the end of a season, it gets distributed to all players.</p>
+  <p><b>How does the reward distribution work?:</b> Every player gets a share of the treasury. The amount depends on how many coins
+  the player collected. For example, a player who collected 10% of all the coins collected by all players, gets 10% of the treasury.</p>
+  <p><b>Who ensures fair distribution?:</b> A smart contract manages player's coins and distribution. 
+  It is impossible to access the treasury's tokens, the wallet that holds the tokens is the contract itself.</p>
+  
+`;
+helpMenu.appendChild(helpInfo);
+
+const backFromControls = document.createElement("button");
+backFromControls.textContent = "Back";
+backFromControls.onclick = () => switchMenu(mainMenu);
+backFromControls.style.marginTop = "20px";
+controlsMenu.appendChild(backFromControls);
 
 
 // ========== Menu Switching ==========
@@ -398,9 +433,10 @@ menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
 menu.appendChild(scoreMenu);
 menu.appendChild(controlsMenu);
+menu.appendChild(helpMenu);
 
 //switchMenu(startGameMenu);
 
-function menuStart() {
+export function menuStart() {
   switchMenu(startGameMenu);
 }
