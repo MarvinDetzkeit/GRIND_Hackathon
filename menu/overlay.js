@@ -81,7 +81,7 @@ seasonText.style.color = "grey";
 seasonText.style.fontFamily = "monospace";
 seasonText.style.fontSize = "14px";
 seasonText.style.zIndex = "10";
-seasonText.textContent = "Season ends April 25th, 1PM EST";
+seasonText.textContent = "Season ends April 27th, 1PM EST";
 
 const loggedInText = document.createElement("div");
 loggedInText.style.position = "absolute";

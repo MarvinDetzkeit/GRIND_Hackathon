@@ -325,6 +325,7 @@ export async function loadScoreMenu() {
             percent,
             grindReward
         } = response;
+        if (treasuryBalance < 1) treasuryBalance = 0;
 
         info.innerHTML = `
             <p>Total Treasury Balance: ${treasuryBalance} $GRIND</p>
