@@ -411,11 +411,11 @@ helpInfo.innerHTML = `
 `;
 helpMenu.appendChild(helpInfo);
 
-const backFromControls = document.createElement("button");
-backFromControls.textContent = "Back";
-backFromControls.onclick = () => switchMenu(mainMenu);
-backFromControls.style.marginTop = "20px";
-controlsMenu.appendChild(backFromControls);
+const backFromHelp = document.createElement("button");
+backFromHelp.textContent = "Back";
+backFromHelp.onclick = () => switchMenu(mainMenu);
+backFromHelp.style.marginTop = "20px";
+helpMenu.appendChild(backFromHelp);
 
 
 // ========== Menu Switching ==========
