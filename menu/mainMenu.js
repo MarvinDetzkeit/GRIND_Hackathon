@@ -343,7 +343,7 @@ export async function loadScoreMenu() {
 const startGameMenu = document.createElement("div");
 
 const startGameBtn = document.createElement("button");
-startGameBtn.textContent = "Enter Game.";
+startGameBtn.textContent = "Enter Game";
 startGameBtn.onclick = () => {
   if (loggedIn) {
   switchMenu(mainMenu);
