@@ -374,8 +374,8 @@ controlsMenu.appendChild(controlsTitle);
 
 const controlsInfo = document.createElement("div");
 controlsInfo.innerHTML = `
-  <p><b>Jump:</b> Press SPACE or UP</p>
-  <p><b>Slide:</b> Press SHIFT or DOWN - Don't hold the button! You stand up after half a second, or after pressing again.</p>
+  <p><b>Jump:</b> Press SPACE or ARROW-UP</p>
+  <p><b>Slide:</b> Press SHIFT or ARROW-DOWN - Don't hold the button! You stand up after half a second, or after pressing again.</p>
 `;
 controlsMenu.appendChild(controlsInfo);
 
@@ -436,4 +436,14 @@ menu.appendChild(scoreMenu);
 menu.appendChild(controlsMenu);
 menu.appendChild(helpMenu);
 
-switchMenu(startGameMenu);
+switchMenu(mainMenu);
+
+export function hideMenu() {
+  menu.style.display = "none";
+}
+
+export function showMenu() {
+  menu.style.display = "block";
+}
+
+hideMenu();
