@@ -435,7 +435,7 @@ menu.appendChild(scoreMenu);
 menu.appendChild(controlsMenu);
 menu.appendChild(helpMenu);
 
-//switchMenu(startGameMenu);
+switchMenu(startGameMenu);
 
 export function menuStart() {
   switchMenu(startGameMenu);

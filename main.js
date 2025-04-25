@@ -18,7 +18,6 @@ async function init() {
   const message = "Log in to Grind Run";
   const signature = await signer.signMessage(message);
 
-  menuStart();
 
   const playerData = await sendToBackend(
     { walletAddress, signature, message },
