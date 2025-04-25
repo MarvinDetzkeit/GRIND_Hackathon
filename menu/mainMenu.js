@@ -35,13 +35,6 @@ document.body.appendChild(menu);
 // ========== Main Menu ==========
 const mainMenu = document.createElement("div");
 
-const startBtn = document.createElement("button");
-startBtn.textContent = "Start Run";
-startBtn.onclick = () => {
-  startGame();
-  switchMenu(mainMenu);
-};
-
 const skinsBtn = document.createElement("button");
 skinsBtn.textContent = "Skins";
 skinsBtn.onclick = async () => {
@@ -92,7 +85,7 @@ helpBtn.onclick = () => switchMenu(helpMenu);
 mainMenu.appendChild(helpBtn);
 
 
-[ startBtn, skinsBtn, perksBtn, leaderboardBtn, controlsBtn, helpBtn ].forEach(btn => {
+[ skinsBtn, perksBtn, leaderboardBtn, controlsBtn, helpBtn ].forEach(btn => {
   btn.style.margin = "10px";
   btn.style.fontSize = "20px";
   btn.style.padding = "10px 20px";
@@ -339,26 +332,6 @@ export async function loadScoreMenu() {
     }
 }
 
-// ========== Start Game Menu ==========
-const startGameMenu = document.createElement("div");
-
-const startGameBtn = document.createElement("button");
-startGameBtn.textContent = "Press after Wallet is connected.";
-startGameBtn.onclick = () => {
-  if (loggedIn) {
-  switchMenu(mainMenu);
-  startGameMenu.remove();
-  startMenuMusic();
-  if (getData().selectedSkin === "") alert("Buy and select a skin to play the game.");
-  }
-};
-
-startGameBtn.style.fontSize = "24px";
-startGameBtn.style.padding = "15px 30px";
-startGameBtn.style.margin = "20px";
-
-startGameMenu.appendChild(startGameBtn);
-
 // ========== Controls Menu ==========
 const controlsMenu = document.createElement("div");
 controlsMenu.style.color = "white";
@@ -429,7 +402,6 @@ function switchMenu(target) {
 }
 
 
-menu.appendChild(startGameMenu);
 menu.appendChild(mainMenu);
 menu.appendChild(skinsMenu);
 menu.appendChild(perksMenu);
