@@ -35,12 +35,4 @@ The game features three characters:
 
 ## Before you play
 
-### Wallet
-We tested the game with the Metamask wallet, so this is the one we recommend.
-But any EVM wallet should work.
-
-### How to get Testnet Tokens
-DM @PhilipHazey on X to get our Testnet \$GRIND tokens.
-
-### Link to the game
-[Grind Run](https://marvindetzkeit.github.io/GRIND_Hackathon)
+Service is offline now.
