@@ -35,4 +35,4 @@ The game features three characters:
 
 ## Before you play
 
-The Web3 and Backend Features are disabled but the core game can be played ![here](https://marvindetzkeit.github.io/GRIND_Hackathon/)
+The Web3 and Backend Features are disabled but the core game can be played !(here)[https://marvindetzkeit.github.io/GRIND_Hackathon/]
