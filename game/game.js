@@ -157,7 +157,7 @@ export function gameLoop(timestamp) {
   if (!GameContext.gameIsRunning) {
     menu.style.display = "block";
     renderLogo();
-    showMenuOverlay();
+    //showMenuOverlay();
     if (delta >= timestep) {
       player.setSkin(getData().selectedSkin);
       updateLogo();

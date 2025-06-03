@@ -304,7 +304,7 @@ title.textContent = "Your Score";
 scoreMenu.appendChild(title);
 
 const info = document.createElement("div");
-info.textContent = "Loading...";
+info.textContent = "The score was a Web3 feature and is now disabled.";
 scoreMenu.appendChild(info);
 
 const backFromScore = document.createElement("button");
@@ -335,7 +335,7 @@ export async function loadScoreMenu() {
             <p>Expected Reward (Based on your current share of coins): ${grindReward.toFixed(2)} $GRIND</p>
         `;
     } catch (err) {
-        info.textContent = "Failed to load score data.";
+        info.textContent = "The score was a Web3 feature and is now disabled.";
         console.error(err);
     }
 }

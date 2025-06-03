@@ -1,5 +1,5 @@
 let data = {
-    walletAddress: "",
+    walletAddress: "None",
     nickName: "",
     coins: 0,
     perks: [],
